@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qnetbench.dev/schemas/v0_1/summary.schema.json",
+  "title": "QNetBench Summary v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["result_schema_version", "run_id", "status", "metrics"],
+  "properties": {
+    "result_schema_version": {"const": "0.1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["complete", "failed"]},
+    "metrics": {"type": "object", "additionalProperties": {"type": ["number", "null"]}}
+  }
+}

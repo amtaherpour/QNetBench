@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qnetbench.dev/schemas/v0_1/error.schema.json",
+  "title": "QNetBench Error v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["error_schema_version", "exception_type", "message", "stage", "traceback"],
+  "properties": {
+    "error_schema_version": {"const": "0.1"},
+    "exception_type": {"type": "string", "minLength": 1},
+    "message": {"type": "string", "minLength": 1},
+    "stage": {"enum": ["validation", "support_check", "execution", "normalization", "metrics", "artifact_write"]},
+    "traceback": {"type": "string"}
+  }
+}

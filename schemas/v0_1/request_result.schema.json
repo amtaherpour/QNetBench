@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qnetbench.dev/schemas/v0_1/request_result.schema.json",
+  "title": "QNetBench RequestResult v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["request_id", "source", "destination", "submitted_at_s", "terminal_at_s", "status", "latency_s", "fidelity", "attempts", "path", "failure_reason", "metadata"],
+  "properties": {
+    "request_id": {"type": "string", "minLength": 1},
+    "source": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"},
+    "destination": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"},
+    "submitted_at_s": {"type": "number", "minimum": 0},
+    "terminal_at_s": {"type": "number", "minimum": 0},
+    "status": {"enum": ["success", "failed", "timed_out", "rejected"]},
+    "latency_s": {"type": "number", "minimum": 0},
+    "fidelity": {"anyOf": [{"type": "number", "minimum": 0, "maximum": 1}, {"type": "null"}]},
+    "attempts": {"type": ["integer", "null"], "minimum": 0},
+    "path": {"anyOf": [{"type": "array", "minItems": 2, "items": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"}}, {"type": "null"}]},
+    "failure_reason": {"type": ["string", "null"]},
+    "metadata": {"type": "object"}
+  }
+}

@@ -41,3 +41,13 @@ class UnsupportedBenchmarkError(AdapterError):
 
 class MetricComputationError(QNetBenchError):
     """Raised when canonical inputs cannot produce standard metrics."""
+
+
+class RunError(QNetBenchError):
+    """Raised after a single-run pipeline writes a validated failed bundle."""
+
+    def __init__(self, message: str, *, output: str | Path | None = None) -> None:
+        self.output = None if output is None else Path(output)
+        if self.output is not None:
+            message = f"{message}; failed bundle: {self.output}"
+        super().__init__(message)

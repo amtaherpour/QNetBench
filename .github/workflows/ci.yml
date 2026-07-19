@@ -47,6 +47,18 @@ jobs:
       - name: Metric tests
         run: python -m pytest -q tests/metrics
 
+      - name: Runner and CLI tests
+        run: python -m pytest -q tests/runners tests/cli
+
+      - name: Installed CLI smoke
+        run: |
+          qnetbench --help
+          qnetbench validate examples/contracts/minimal_benchmark.yaml
+          tmp_dir="$(mktemp -d)"
+          qnetbench run examples/contracts/minimal_benchmark.yaml --backend mock --seed 5 --out "$tmp_dir/run"
+          qnetbench validate-result "$tmp_dir/run"
+          qnetbench summarize "$tmp_dir/run"
+
       - name: Full test suite
         run: python -m pytest -q
 

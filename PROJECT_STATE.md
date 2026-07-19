@@ -2,10 +2,10 @@
 
 Last updated (UTC): 2026-07-19
 Status: COMPLETE
-Active checkpoint: 5 — Backend-independent metric engine
-Last completed checkpoint: 5 — Backend-independent metric engine
-Branch: `checkpoint-05-metrics`
-Last good commit: `5714cd3a3abcb88a54e2944665bcca2c88c8df9a` (CI run 29699911257)
+Active checkpoint: 6 — Single-run orchestration and CLI
+Last completed checkpoint: 6 — Single-run orchestration and CLI
+Branch: `checkpoint-06-runner-cli`
+Last good commit: `3f3008700ea9df06a2532d16a2f53ffc9767a777` (CI run 29700289691)
 Working tree: clean after commit
 
 ## Release target
@@ -27,29 +27,28 @@ Working tree: clean after commit
 
 ## Last passing commands
 
-GitHub Actions CI run 29699911257:
+GitHub Actions CI run 29700289691:
 
 - editable development installation — passed
 - `python -m ruff check .` — passed
 - `python -m ruff format --check .` — passed
-- frozen contract tests — passed
-- specification tests — passed
-- result and artifact tests — passed
-- adapter tests — passed
-- metric tests — passed
+- contract, specification, result/artifact, adapter, and metric tests — passed
+- runner and CLI tests — passed
+- installed `qnetbench` CLI smoke — passed
 - full repository test suite — passed
 - `git diff --check` — passed
 
 ## What works now
 
-- Checkpoints 0–4 capabilities, including the deterministic synthetic mock adapter.
-- The frozen v0.1 eight-metric registry and backend-independent metric engine.
-- Explicit unavailable states, stable coverage/population counts, nearest-rank p95, and measurement-window handling.
-- Metrics consume only canonical complete manifests and request records.
+- Checkpoints 0–5 capabilities.
+- Adapter-neutral single-run orchestration, execution hashes, run IDs, exact provenance manifests, metrics, summaries, and atomic bundles.
+- CLI commands `validate`, `run`, `summarize`, and `validate-result`.
+- Support and execution failures produce validated failed bundles and nonzero exits.
+- Existing output is rejected unless overwrite is explicit.
 
 ## What is intentionally not implemented
 
-- Runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
+- Benchmark catalog/list command, sweeps, plots, and SeQUeNCe integration.
 
 ## Open blockers
 
@@ -57,21 +56,21 @@ GitHub Actions CI run 29699911257:
 
 ## Frozen assumptions in force
 
-- Metrics consume only a canonical complete run manifest and canonical request records.
-- Metrics do not read summaries, events, raw output, adapters, or simulator objects.
-- Metric IDs, units, populations, and edge-case semantics match contract v0.1.
+- Execution hashes include benchmark hash, backend identity, seed, and execution options but exclude timestamps and output paths.
+- The runner is adapter-neutral and uses only registry-facing adapter APIs.
+- Saved summaries are derived convenience data and never metric inputs.
 
 ## Latest checkpoint evidence
 
-- Report: `docs/ai_handoff/checkpoint_05_report.md`
-- CI run: 29699911257
-- Focused tests: `tests/metrics/`
+- Report: `docs/ai_handoff/checkpoint_06_report.md`
+- CI run: 29700289691
+- Focused tests: `tests/runners/` and `tests/cli/`
 
 ## Next allowed action
 
-Execute Checkpoint 6 only: single-run orchestration and CLI through the mock backend.
+Execute Checkpoint 7 only: frozen four-benchmark catalog and user-facing mock documentation.
 
 ## Notes for the next agent
 
-- The runner must remain adapter-neutral.
-- Summary output is derived convenience data and never a metric source.
+- Checkpoint 7 may add the `list` command and exactly four frozen benchmark files.
+- Do not add sweeps, plots, or SeQUeNCe behavior.

@@ -4,7 +4,7 @@ QNetBench is a Python benchmark and reproducibility layer above quantum-network 
 
 ## Current status
 
-The repository is implementing **Checkpoint 2: benchmark loading, normalization, and hashing**.
+The repository has completed **Checkpoint 2: benchmark loading, normalization, and hashing**.
 
 Available now:
 

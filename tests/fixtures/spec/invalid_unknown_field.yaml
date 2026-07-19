@@ -1,0 +1,24 @@
+schema_version: '0.1'
+benchmark_id: qnb-v0-1-invalid
+title: Invalid fixture
+description: Contains a prohibited execution field.
+backend: mock
+network:
+  nodes: [{node_id: alice}, {node_id: bob}]
+  links: [{link_id: alice-bob, endpoints: [alice, bob], length_km: 10.0}]
+physical_profile:
+  memory_count_per_node: 2
+  memory_coherence_time_s: 1.0
+  memory_frequency_hz: 1000.0
+  memory_efficiency: 0.9
+  detector_efficiency: 0.9
+  fiber_attenuation_db_per_km: 0.2
+  quantum_propagation_speed_km_per_s: 200000.0
+  classical_propagation_speed_km_per_s: 200000.0
+  link_fidelity: 0.95
+  swap_success_probability: 0.8
+  swap_fidelity_factor: 0.9
+workload: {source: alice, destination: bob, request_count: 2, batch_start_s: 0.0, deadline_s: 1.0}
+protocol: {routing: shortest_path, shortest_path_tiebreak: lexical, swapping: none, purification: none}
+requested_metrics: [request_success_probability]
+extensions: {}

@@ -1,0 +1,37 @@
+title: Equivalent formatting fixture
+schema_version: "0.1"
+description: Same scientific input as the JSON fixture with a different mapping order.
+benchmark_id: qnb-v0-1-equivalent
+extensions: {}
+requested_metrics: [request_success_probability, latency_mean_s]
+protocol:
+  purification: none
+  swapping: none
+  shortest_path_tiebreak: lexical
+  routing: shortest_path
+workload:
+  deadline_s: 2
+  batch_start_s: -0.0
+  request_count: 3
+  destination: bob
+  source: alice
+physical_profile:
+  swap_fidelity_factor: 0.9
+  swap_success_probability: 0.8
+  link_fidelity: 0.95
+  classical_propagation_speed_km_per_s: 200000
+  quantum_propagation_speed_km_per_s: 200000.0
+  fiber_attenuation_db_per_km: 0.2
+  detector_efficiency: 0.9
+  memory_efficiency: 0.9
+  memory_frequency_hz: 1000
+  memory_coherence_time_s: 1
+  memory_count_per_node: 2
+network:
+  links:
+    - length_km: 10
+      endpoints: [alice, bob]
+      link_id: alice-bob
+  nodes:
+    - {node_id: alice}
+    - {node_id: bob}

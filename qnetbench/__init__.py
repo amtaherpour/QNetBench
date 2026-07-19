@@ -1,7 +1,7 @@
-"""QNetBench package skeleton.
+"""QNetBench benchmark and reproducibility layer.
 
-QNetBench is a benchmark layer above quantum-network simulators. Product
-behavior is intentionally absent at Checkpoint 0.
+QNetBench validates backend-independent benchmark specifications and will add
+execution behavior only through later checkpoint-defined modules.
 """
 
 __version__ = "0.0.0.dev0"

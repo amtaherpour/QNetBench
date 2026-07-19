@@ -1,20 +1,20 @@
 # QNetBench
 
-QNetBench is a planned Python benchmark and reproducibility layer above quantum-network simulators. It is **not** a simulator.
+QNetBench is a Python benchmark and reproducibility layer above quantum-network simulators. It is **not** a simulator.
 
 ## Current status
 
-The repository is at **Checkpoint 0: repository control plane and minimal package skeleton**.
+The repository has completed **Checkpoint 2: benchmark loading, normalization, and hashing**.
 
-At this checkpoint:
+Available now:
 
-- the package imports as `qnetbench`;
-- the package version is `0.0.0.dev0`;
-- Python 3.12 is the required baseline;
-- default lint and test automation is present;
-- no product behavior is implemented.
+- frozen BenchmarkSpec, canonical-result, and metric contracts at version 0.1;
+- strict Pydantic v2 runtime models for BenchmarkSpec v0.1;
+- safe YAML/JSON benchmark loading with typed configuration errors;
+- deterministic canonical JSON and SHA-256 benchmark hashing;
+- Python 3.12 CI with contract, specification, and full-suite checks.
 
-The benchmark, result, and metric contracts are still drafts and are not implemented. There is no CLI, adapter, simulator dependency, metric engine, runner, benchmark catalog, sweep support, or plotting support yet.
+Not implemented yet: result artifact I/O, adapters, metric computation, runners, CLI commands, the benchmark catalog, sweeps, plots, or SeQUeNCe integration.
 
 ## Development setup
 
@@ -22,18 +22,15 @@ The benchmark, result, and metric contracts are still drafts and are not impleme
 python -m pip install -e ".[dev]"
 python -m ruff check .
 python -m ruff format --check .
+python -m pytest -q tests/contracts
+python -m pytest -q tests/spec
 python -m pytest -q
 git diff --check
 ```
 
 ## Planning documents
 
-Authoritative project guidance is stored under `docs/planning/`:
-
-- `QNetBench_Improved_AI_Handoff_Manual_v0_2.md`
-- `QNetBench_Codex_Execution_Control_Plan_v0_1.md`
-
-Read `AGENTS.md` and `PROJECT_STATE.md` before making changes.
+Authoritative project guidance is stored under `docs/planning/`. Read `AGENTS.md` and `PROJECT_STATE.md` before making changes.
 
 ## License
 

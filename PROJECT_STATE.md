@@ -2,10 +2,10 @@
 
 Last updated (UTC): 2026-07-19
 Status: COMPLETE
-Active checkpoint: 1 — Freeze the v0.1 contracts
-Last completed checkpoint: 1 — Freeze the v0.1 contracts
+Active checkpoint: 2 — Benchmark loading, normalization, and hashing
+Last completed checkpoint: 2 — Benchmark loading, normalization, and hashing
 Branch: `main`
-Last good commit: `fdf2facdb4d130cc43e235dc49ca6d7d703bf2f4` (final-audit CI run 29696426937)
+Last good commit: `4258224206e62ad402d673e4fe21cabd452dbfd5` (CI run 29697121906)
 Working tree: clean after merge
 
 ## Release target
@@ -21,32 +21,34 @@ Working tree: clean after merge
 
 ## Environment last verified
 
-- Python: CPython 3.12 on GitHub-hosted Ubuntu
+- Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
 - Install command: `python -m pip install -e ".[dev]"`
 - SeQUeNCe revision/environment: N/A
 
 ## Last passing commands
 
-GitHub Actions final-audit CI run 29696426937:
+GitHub Actions CI run 29697121906:
 
 - `python -m pip install -e ".[dev]"` — passed
 - `python -m ruff check .` — passed
 - `python -m ruff format --check .` — passed
 - `python -m pytest -q tests/contracts` — passed
+- `python -m pytest -q tests/spec` — passed
 - `python -m pytest -q` — passed
 - `git diff --check` — passed
 
 ## What works now
 
-- Six valid v0.1 JSON Schemas.
-- Minimal benchmark, complete-run, and failed-run examples validate.
-- Negative contract cases are rejected.
-- Benchmark, canonical-result, and metric contracts are frozen for implementation.
-- The exact Checkpoint 1 command matrix passes in CI.
+- Frozen v0.1 contracts and examples from Checkpoint 1.
+- Strict BenchmarkSpec runtime models conform to the frozen benchmark schema.
+- Safe YAML/JSON loading returns one typed `BenchmarkSpec` or raises a path-aware `ConfigError`.
+- Equivalent source formatting and mapping order produce identical canonical JSON and hashes.
+- The minimal benchmark golden hash is `fa5b7b457debdb5dde5dd35fea3b5186511ed90cfd350327b5cf7ae837618d97`.
+- Specification code has no imports from adapters, artifacts, metrics, results, runners, or simulators.
 
 ## What is intentionally not implemented
 
-- Runtime Pydantic models, loaders, hashing, adapters, metrics implementation, runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
+- Result artifacts, adapters, metrics implementation, runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
 
 ## Open blockers
 
@@ -54,24 +56,23 @@ GitHub Actions final-audit CI run 29696426937:
 
 ## Frozen assumptions in force
 
-- BenchmarkSpec is backend-independent.
-- Unknown fields are rejected.
-- Canonical manifest and terminal request records are the only metric inputs.
-- Breaking contract changes require explicit approval, an ADR, fixture updates, and versioning.
+- Runtime models implement BenchmarkSpec v0.1 without schema changes.
+- Unknown fields, invalid ranges, duplicate IDs, invalid references, non-finite values, and unsafe YAML constructors are rejected.
+- Canonical hashing uses compact sorted-key UTF-8 JSON and lowercase SHA-256.
+- Backend, seed, output, and sweep concerns remain outside BenchmarkSpec.
 
 ## Latest checkpoint evidence
 
-- Report: `docs/ai_handoff/checkpoint_01_report.md`
-- Final-audit CI run: 29696426937
-- Examples: `examples/contracts/`
-- Schemas: `schemas/v0_1/`
+- Report: `docs/ai_handoff/checkpoint_02_report.md`
+- CI run: 29697121906
+- Golden hash: `tests/spec/test_hashing.py`
+- Equivalent fixtures: `tests/fixtures/spec/valid_equivalent.yaml` and `.json`
 
 ## Next allowed action
 
-Execute Checkpoint 2 only: benchmark loading, normalization, and hashing.
+Execute Checkpoint 3 only: canonical result models and artifact bundle I/O.
 
 ## Notes for the next agent
 
-- Implement the frozen contracts exactly; do not change schemas for convenience.
-- No production runtime behavior was added in Checkpoint 1.
-- Earlier failed CI runs remain only as normal GitHub history; they contain no files or unresolved defects in `main`.
+- Implement the frozen result contracts exactly; do not change schemas for convenience.
+- Do not add adapters or metric computation during Checkpoint 3.

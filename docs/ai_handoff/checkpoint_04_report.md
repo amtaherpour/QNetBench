@@ -1,9 +1,9 @@
 # Checkpoint 04 Report: Adapter interface, registry, and deterministic mock adapter
 
-Status: IN_PROGRESS
+Status: COMPLETE
 Date (UTC): 2026-07-19
 Branch: `checkpoint-04-mock-adapter`
-Commit: pending CI-verified head
+Commit: CI-verified implementation head `bf7a4bc175cda21b8a8414d96b9b63153e95c912`; completion metadata committed afterward
 Previous good commit: `ee714b0093d9dff17a941d500af3abb39e66af3e`
 Active contract versions: benchmark 0.1 frozen; result 0.1 frozen; metrics 0.1 frozen
 
@@ -39,19 +39,23 @@ Active contract versions: benchmark 0.1 frozen; result 0.1 frozen; metrics 0.1 f
 
 - `qnetbench/errors.py`: added typed adapter and unsupported-benchmark errors.
 - `.github/workflows/ci.yml`: added the exact Checkpoint 4 adapter test command.
-- `PROJECT_STATE.md`: activated the Checkpoint 4 verification boundary.
+- `PROJECT_STATE.md`: recorded completion and authorized Checkpoint 5 only.
 
 ## Commands run
 
-Authoritative Python 3.12 GitHub Actions verification is pending.
+Authoritative environment: GitHub-hosted Ubuntu 24.04 with CPython 3.12, CI run 29699627204.
 
 | Command | Exit | Result |
 |---|---:|---|
-| `python -m ruff check qnetbench/adapters qnetbench/errors.py tests/adapters` | 0 | Development lint passed. |
-| `python -m ruff format --check qnetbench/adapters qnetbench/errors.py tests/adapters` | 0 | Development formatting passed. |
-| `python -m pytest -q tests/adapters` | 0 | 10 adapter tests passed in development. |
-| `python -m pytest -q` | pending | Python 3.12 CI pending. |
-| `git diff --check` | pending | Python 3.12 CI pending. |
+| `python -m pip install -e ".[dev]"` | 0 | Editable installation passed. |
+| `python -m ruff check .` | 0 | Lint passed after correcting one reported line-length defect. |
+| `python -m ruff format --check .` | 0 | Formatting passed. |
+| `python -m pytest -q tests/contracts` | 0 | Frozen contract tests passed. |
+| `python -m pytest -q tests/spec` | 0 | Specification tests passed. |
+| `python -m pytest -q tests/results tests/artifacts` | 0 | Result and artifact tests passed. |
+| `python -m pytest -q tests/adapters` | 0 | Adapter tests passed. |
+| `python -m pytest -q` | 0 | Full repository test suite passed. |
+| `git diff --check` | 0 | Whitespace check passed. |
 
 ## Support report evidence
 
@@ -59,10 +63,14 @@ Supported minimal benchmark: `supported=true`, no unsupported paths, warning tha
 
 Unsupported direct-link fixture with sequential swapping: `supported=false`, path `protocol.swapping`, reason that a two-node path requires `none`.
 
+## Quality note
+
+The first branch CI attempt failed at Ruff because one source line exceeded the repository's configured length. The line was corrected; the subsequent full Python 3.12 gate passed every step. Only the passing final implementation head is accepted as Checkpoint 4 evidence.
+
 ## Open issues and risks
 
-- Python 3.12 CI verification pending.
+- None blocking Checkpoint 5.
 
 ## Final status
 
-STATUS: IN_PROGRESS — Checkpoint 4 verification pending. STOP.
+STATUS: COMPLETE - Checkpoint 4 only. STOP. Next allowed checkpoint: 5.

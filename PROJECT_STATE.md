@@ -1,11 +1,11 @@
 # QNetBench Project State
 
 Last updated (UTC): 2026-07-19
-Status: IN_PROGRESS
+Status: COMPLETE
 Active checkpoint: 0 — Repository control plane and minimal package skeleton
-Last completed checkpoint: none
-Branch: `main`
-Last good commit: pending clean Checkpoint 0 verification
+Last completed checkpoint: 0 — Repository control plane and minimal package skeleton
+Branch: `checkpoint-00-ci-verification`
+Last good commit: `361313deaae985875b695a837273c5f01c69db9b` (CI run 29673928221)
 Working tree: clean after commit
 
 ## Release target
@@ -21,20 +21,27 @@ Working tree: clean after commit
 
 ## Environment last verified
 
-- Python: 3.12 via GitHub Actions, verification pending
-- Platform: GitHub-hosted Ubuntu runner, verification pending
+- Python: CPython 3.12.13
+- Platform: GitHub-hosted Ubuntu 24.04.4 runner
 - Install command: `python -m pip install -e ".[dev]"`
 - SeQUeNCe revision/environment: N/A
 
 ## Last passing commands
 
-- Pending clean Checkpoint 0 CI verification.
+GitHub Actions CI run 29673928221 on 2026-07-19:
+
+- `python -m pip install -e ".[dev]"` — passed
+- `python -m ruff check .` — passed; all checks passed
+- `python -m ruff format --check .` — passed; 2 files already formatted
+- `python -m pytest -q` — passed; 1 test passed
+- `git diff --check` — passed
 
 ## What works now
 
-- Minimal `qnetbench` package skeleton exists.
-- Package version is declared as `0.0.0.dev0`.
-- Default CI is configured for Python 3.12.
+- The package installs in editable mode.
+- `qnetbench` imports successfully.
+- `qnetbench.__version__` equals `0.0.0.dev0`.
+- Default Python 3.12 CI passes installation, lint, formatting, tests, and whitespace checks.
 
 ## What is intentionally not implemented
 
@@ -42,7 +49,7 @@ Working tree: clean after commit
 
 ## Open blockers
 
-- None. Checkpoint 0 verification is pending.
+- None.
 
 ## Frozen assumptions in force
 
@@ -56,14 +63,16 @@ Working tree: clean after commit
 ## Latest checkpoint evidence
 
 - Report: `docs/ai_handoff/checkpoint_00_report.md`
+- CI run: 29673928221
 - Representative artifacts: N/A
 - Golden hashes: N/A
 
 ## Next allowed action
 
-Complete Checkpoint 0 verification only. Do not begin Checkpoint 1 until the report and this state file record passing evidence.
+Execute Checkpoint 1 only: freeze the v0.1 contracts.
 
 ## Notes for the next agent
 
 - The repository tree was rebuilt from scratch by explicit owner instruction.
 - Do not infer that previous historical repository contents are current implementation state.
+- Do not implement runtime models or product behavior during Checkpoint 1.

@@ -1,9 +1,9 @@
 # Checkpoint 03 Report: Canonical result models and artifact bundle I/O
 
-Status: IN_PROGRESS
+Status: COMPLETE
 Date (UTC): 2026-07-19
 Branch: `checkpoint-03-result-bundles`
-Commit: pending CI-verified head
+Commit: CI-verified head `995f0ce9cb353f457e7119b63ee70a57ceb90b02`; completion metadata committed afterward
 Previous good commit: `675e016f7431d40e0679e3945b4db74bfd211f68`
 Active contract versions: benchmark 0.1 frozen; result 0.1 frozen; metrics 0.1 frozen
 
@@ -12,7 +12,7 @@ Active contract versions: benchmark 0.1 frozen; result 0.1 frozen; metrics 0.1 f
 - Added strict canonical run manifest, request result, metric row, summary, and error models.
 - Added cross-record validation for identity, hashes, counts, request uniqueness, metric rows, and summaries.
 - Added safe JSON, JSONL, CSV, and benchmark readers with file and line context.
-- Added temporary-sibling validated writes and explicit overwrite handling.
+- Added temporary-sibling validated writes, explicit overwrite handling, and cleanup after failed finalization.
 - Added complete and failed fixture layouts and round-trip/failure tests.
 - Added no adapter or metric-computation behavior.
 
@@ -35,25 +35,28 @@ Active contract versions: benchmark 0.1 frozen; result 0.1 frozen; metrics 0.1 f
 
 - `qnetbench/errors.py`: added public result-validation and artifact errors.
 - `.github/workflows/ci.yml`: added the exact Checkpoint 3 focused test command.
-- `PROJECT_STATE.md`: activated Checkpoint 3 and recorded the verification boundary.
+- `PROJECT_STATE.md`: recorded Checkpoint 3 completion and authorized Checkpoint 4 only.
 
 ## Tests added or changed
 
 - Request invariants: time relations, latency identity, status-dependent fields, paths, non-finite values, duplicate IDs, and count mismatches.
 - Bundle round trips: complete and failed layouts preserve normalized models and ignore optional `events.jsonl` and `raw/`.
-- Bundle failures: malformed JSONL line context, missing files, invalid hashes, explicit overwrite, failed-run metrics rejection, and atomic cleanup.
+- Bundle failures: malformed JSONL line context, missing files, invalid hashes, explicit overwrite, failed-run metrics rejection, finalization failure, and atomic cleanup.
 
 ## Commands run
 
-Local development environment: CPython 3.13.5. Authoritative Python 3.12 CI is pending.
+Authoritative environment: GitHub-hosted Ubuntu 24.04 with CPython 3.12, CI run 29697824348.
 
 | Command | Exit | Result |
 |---|---:|---|
-| `python -m ruff check qnetbench/results qnetbench/artifacts tests/results tests/artifacts` | 0 | Focused lint passed locally. |
-| `python -m ruff format --check qnetbench/results qnetbench/artifacts tests/results tests/artifacts` | 0 | Focused formatting passed locally. |
-| `python -m pytest -q tests/results tests/artifacts` | 0 | 19 tests passed locally. |
-| `python -m pytest -q` | pending | Full Python 3.12 CI pending. |
-| `git diff --check` | pending | Python 3.12 CI pending. |
+| `python -m pip install -e ".[dev]"` | 0 | Editable installation and dependencies passed. |
+| `python -m ruff check .` | 0 | Lint passed. |
+| `python -m ruff format --check .` | 0 | Formatting check passed. |
+| `python -m pytest -q tests/contracts` | 0 | Frozen contract tests passed. |
+| `python -m pytest -q tests/spec` | 0 | Specification tests passed. |
+| `python -m pytest -q tests/results tests/artifacts` | 0 | Focused result/artifact tests passed; 20 passed in local pre-CI verification. |
+| `python -m pytest -q` | 0 | Full repository test suite passed. |
+| `git diff --check` | 0 | Whitespace check passed. |
 
 ## Artifact evidence
 
@@ -79,6 +82,16 @@ tests/fixtures/results/failed_run/
   error.json
 ```
 
+Atomic-write strategy:
+
+- write all files into a temporary sibling directory;
+- read and validate the temporary bundle;
+- rename it into place;
+- for explicit overwrite, temporarily move the previous directory aside and restore it if finalization fails;
+- remove temporary output after any failure.
+
+Representative invariant failure: `requests[1].request_id duplicates requests[0].request_id`.
+
 ## Contract and architecture checks
 
 - BenchmarkSpec changed: no.
@@ -89,9 +102,9 @@ tests/fixtures/results/failed_run/
 
 ## Assumptions and decisions
 
-- Temporary sibling directories are fully written and re-read before final rename.
-- Explicit overwrite uses a temporary sibling backup so the previous destination can be restored if finalization fails.
 - Summary metrics may be a validated subset of metric rows because the frozen example is a subset.
+- Failed bundles may include validated partial request records when `written_request_count` records their exact count.
+- Atomic directory replacement relies on same-filesystem sibling renames; platform-specific atomicity is limited by the host filesystem.
 
 ## Deviations from checkpoint plan
 
@@ -99,14 +112,14 @@ tests/fixtures/results/failed_run/
 
 ## Open issues and risks
 
-- Python 3.12 CI verification pending.
+- None blocking Checkpoint 4.
 
 ## PROJECT_STATE.md update
 
-- Current checkpoint/result: Checkpoint 3 in progress.
-- Last passing evidence: local focused tests.
-- Next allowed action: complete Checkpoint 3 verification only.
+- Current checkpoint/result: Checkpoint 3 complete.
+- Last passing evidence: GitHub Actions CI run 29697824348.
+- Next allowed action: Checkpoint 4 only.
 
 ## Final status
 
-STATUS: IN_PROGRESS — Checkpoint 3 verification pending. STOP.
+STATUS: COMPLETE - Checkpoint 3 only. STOP. Next allowed checkpoint: 4.

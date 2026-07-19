@@ -38,6 +38,9 @@ jobs:
       - name: Specification tests
         run: python -m pytest -q tests/spec
 
+      - name: Result and artifact tests
+        run: python -m pytest -q tests/results tests/artifacts
+
       - name: Full test suite
         run: python -m pytest -q
 

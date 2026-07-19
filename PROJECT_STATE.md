@@ -1,12 +1,12 @@
 # QNetBench Project State
 
 Last updated (UTC): 2026-07-19
-Status: COMPLETE
-Active checkpoint: 2 — Benchmark loading, normalization, and hashing
+Status: IN_PROGRESS
+Active checkpoint: 3 — Canonical result models and artifact bundle I/O
 Last completed checkpoint: 2 — Benchmark loading, normalization, and hashing
-Branch: `main`
-Last good commit: `4258224206e62ad402d673e4fe21cabd452dbfd5` (CI run 29697121906)
-Working tree: clean after merge
+Branch: `checkpoint-03-result-bundles`
+Last good commit: `675e016f7431d40e0679e3945b4db74bfd211f68`
+Working tree: committed on checkpoint branch
 
 ## Release target
 
@@ -21,58 +21,48 @@ Working tree: clean after merge
 
 ## Environment last verified
 
-- Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
+- Python: CPython 3.12 required; GitHub Actions verification pending
 - Install command: `python -m pip install -e ".[dev]"`
 - SeQUeNCe revision/environment: N/A
 
 ## Last passing commands
 
-GitHub Actions CI run 29697121906:
-
-- `python -m pip install -e ".[dev]"` — passed
-- `python -m ruff check .` — passed
-- `python -m ruff format --check .` — passed
-- `python -m pytest -q tests/contracts` — passed
-- `python -m pytest -q tests/spec` — passed
-- `python -m pytest -q` — passed
-- `git diff --check` — passed
+- Checkpoint 2 CI run 29697202931 passed.
+- Checkpoint 3 focused result/artifact tests pass locally on Python 3.13.5; Python 3.12 CI pending.
 
 ## What works now
 
-- Frozen v0.1 contracts and examples from Checkpoint 1.
-- Strict BenchmarkSpec runtime models conform to the frozen benchmark schema.
-- Safe YAML/JSON loading returns one typed `BenchmarkSpec` or raises a path-aware `ConfigError`.
-- Equivalent source formatting and mapping order produce identical canonical JSON and hashes.
-- The minimal benchmark golden hash is `fa5b7b457debdb5dde5dd35fea3b5186511ed90cfd350327b5cf7ae837618d97`.
-- Specification code has no imports from adapters, artifacts, metrics, results, runners, or simulators.
+- Frozen contracts and strict BenchmarkSpec runtime from Checkpoints 1–2.
+- Canonical result models, cross-record validation, safe bundle readers, and atomic writers are implemented on the checkpoint branch.
+- Complete and failed fixture bundles round-trip locally.
 
 ## What is intentionally not implemented
 
-- Result artifacts, adapters, metrics implementation, runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
+- Adapters, metric computation, runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
 
 ## Open blockers
 
-- None.
+- None; Checkpoint 3 Python 3.12 CI verification pending.
 
 ## Frozen assumptions in force
 
-- Runtime models implement BenchmarkSpec v0.1 without schema changes.
-- Unknown fields, invalid ranges, duplicate IDs, invalid references, non-finite values, and unsafe YAML constructors are rejected.
-- Canonical hashing uses compact sorted-key UTF-8 JSON and lowercase SHA-256.
-- Backend, seed, output, and sweep concerns remain outside BenchmarkSpec.
+- Canonical result models implement frozen Contract v0.1 without schema changes.
+- Complete bundles require one unique terminal record per planned request.
+- Failed bundles contain no standard metrics.
+- `events.jsonl` and `raw/` are optional and ignored by metric-independent validation.
+- Existing output is never overwritten without explicit authorization.
 
 ## Latest checkpoint evidence
 
-- Report: `docs/ai_handoff/checkpoint_02_report.md`
-- CI run: 29697121906
-- Golden hash: `tests/spec/test_hashing.py`
-- Equivalent fixtures: `tests/fixtures/spec/valid_equivalent.yaml` and `.json`
+- Report: `docs/ai_handoff/checkpoint_03_report.md`
+- Complete fixture: `tests/fixtures/results/complete_run/`
+- Failed fixture: `tests/fixtures/results/failed_run/`
 
 ## Next allowed action
 
-Execute Checkpoint 3 only: canonical result models and artifact bundle I/O.
+Complete Checkpoint 3 verification only. Do not begin Checkpoint 4 until all required commands pass and the report is complete.
 
 ## Notes for the next agent
 
-- Implement the frozen result contracts exactly; do not change schemas for convenience.
 - Do not add adapters or metric computation during Checkpoint 3.
+- Do not change frozen schemas for implementation convenience.

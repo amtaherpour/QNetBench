@@ -44,6 +44,9 @@ jobs:
       - name: Adapter tests
         run: python -m pytest -q tests/adapters
 
+      - name: Metric tests
+        run: python -m pytest -q tests/metrics
+
       - name: Full test suite
         run: python -m pytest -q
 

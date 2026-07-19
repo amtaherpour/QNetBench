@@ -1,0 +1,7 @@
+{
+  "error_schema_version": "0.1",
+  "exception_type": "RuntimeError",
+  "message": "Synthetic failure fixture",
+  "stage": "execution",
+  "traceback": "RuntimeError: Synthetic failure fixture"
+}

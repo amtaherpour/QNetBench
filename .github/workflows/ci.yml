@@ -35,6 +35,9 @@ jobs:
       - name: Contract tests
         run: python -m pytest -q tests/contracts
 
+      - name: Specification tests
+        run: python -m pytest -q tests/spec
+
       - name: Full test suite
         run: python -m pytest -q
 

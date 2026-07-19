@@ -1,0 +1,38 @@
+{
+  "benchmark_id": "qnb-v0-1-equivalent",
+  "description": "Same scientific input as the JSON fixture with a different mapping order.",
+  "extensions": {},
+  "network": {
+    "links": [{"endpoints": ["alice", "bob"], "length_km": 10.0, "link_id": "alice-bob"}],
+    "nodes": [{"node_id": "alice"}, {"node_id": "bob"}]
+  },
+  "physical_profile": {
+    "classical_propagation_speed_km_per_s": 200000.0,
+    "detector_efficiency": 0.9,
+    "fiber_attenuation_db_per_km": 0.2,
+    "link_fidelity": 0.95,
+    "memory_coherence_time_s": 1.0,
+    "memory_count_per_node": 2,
+    "memory_efficiency": 0.9,
+    "memory_frequency_hz": 1000.0,
+    "quantum_propagation_speed_km_per_s": 200000.0,
+    "swap_fidelity_factor": 0.9,
+    "swap_success_probability": 0.8
+  },
+  "protocol": {
+    "purification": "none",
+    "routing": "shortest_path",
+    "shortest_path_tiebreak": "lexical",
+    "swapping": "none"
+  },
+  "requested_metrics": ["request_success_probability", "latency_mean_s"],
+  "schema_version": "0.1",
+  "title": "Equivalent formatting fixture",
+  "workload": {
+    "batch_start_s": 0.0,
+    "deadline_s": 2.0,
+    "destination": "bob",
+    "request_count": 3,
+    "source": "alice"
+  }
+}

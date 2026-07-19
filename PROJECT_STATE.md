@@ -1,12 +1,12 @@
 # QNetBench Project State
 
 Last updated (UTC): 2026-07-19
-Status: COMPLETE
-Active checkpoint: 1 — Freeze the v0.1 contracts
+Status: IN_PROGRESS
+Active checkpoint: 2 — Benchmark loading, normalization, and hashing
 Last completed checkpoint: 1 — Freeze the v0.1 contracts
-Branch: `main`
-Last good commit: `fdf2facdb4d130cc43e235dc49ca6d7d703bf2f4` (final-audit CI run 29696426937)
-Working tree: clean after merge
+Branch: `checkpoint-02-spec-runtime`
+Last good commit: `37f032009b5b37246d73b9185f7dc50f3c94cc92`
+Working tree: committed on checkpoint branch
 
 ## Release target
 
@@ -21,57 +21,47 @@ Working tree: clean after merge
 
 ## Environment last verified
 
-- Python: CPython 3.12 on GitHub-hosted Ubuntu
+- Python: CPython 3.12 required; GitHub Actions verification pending
 - Install command: `python -m pip install -e ".[dev]"`
 - SeQUeNCe revision/environment: N/A
 
 ## Last passing commands
 
-GitHub Actions final-audit CI run 29696426937:
-
-- `python -m pip install -e ".[dev]"` — passed
-- `python -m ruff check .` — passed
-- `python -m ruff format --check .` — passed
-- `python -m pytest -q tests/contracts` — passed
-- `python -m pytest -q` — passed
-- `git diff --check` — passed
+- Checkpoint 1 final-audit CI run 29696471826 passed.
+- Checkpoint 2 local development checks passed on Python 3.13.5; Python 3.12 CI pending.
 
 ## What works now
 
-- Six valid v0.1 JSON Schemas.
-- Minimal benchmark, complete-run, and failed-run examples validate.
-- Negative contract cases are rejected.
-- Benchmark, canonical-result, and metric contracts are frozen for implementation.
-- The exact Checkpoint 1 command matrix passes in CI.
+- Frozen v0.1 contracts and examples from Checkpoint 1.
+- Strict BenchmarkSpec runtime models, safe YAML/JSON loading, canonical JSON, and SHA-256 hashing are implemented on the checkpoint branch.
+- Equivalent YAML/JSON fixtures and a golden minimal-benchmark hash are tested locally.
 
 ## What is intentionally not implemented
 
-- Runtime Pydantic models, loaders, hashing, adapters, metrics implementation, runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
+- Result artifacts, adapters, metrics implementation, runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
 
 ## Open blockers
 
-- None.
+- None; Checkpoint 2 Python 3.12 CI verification pending.
 
 ## Frozen assumptions in force
 
-- BenchmarkSpec is backend-independent.
-- Unknown fields are rejected.
-- Canonical manifest and terminal request records are the only metric inputs.
-- Breaking contract changes require explicit approval, an ADR, fixture updates, and versioning.
+- Runtime models implement the frozen BenchmarkSpec v0.1 without schema changes.
+- Unknown fields and unsafe YAML constructors are rejected.
+- Canonical hashing uses compact sorted-key UTF-8 JSON and lowercase SHA-256.
+- Backend, result, and metric modules are not imported by `qnetbench.spec`.
 
 ## Latest checkpoint evidence
 
-- Report: `docs/ai_handoff/checkpoint_01_report.md`
-- Final-audit CI run: 29696426937
-- Examples: `examples/contracts/`
-- Schemas: `schemas/v0_1/`
+- Report: `docs/ai_handoff/checkpoint_02_report.md`
+- Golden hash: `tests/spec/test_hashing.py`
+- Equivalent fixtures: `tests/fixtures/spec/valid_equivalent.yaml` and `.json`
 
 ## Next allowed action
 
-Execute Checkpoint 2 only: benchmark loading, normalization, and hashing.
+Complete Checkpoint 2 verification only. Do not begin Checkpoint 3 until all required commands pass and the report is complete.
 
 ## Notes for the next agent
 
-- Implement the frozen contracts exactly; do not change schemas for convenience.
-- No production runtime behavior was added in Checkpoint 1.
-- Earlier failed CI runs remain only as normal GitHub history; they contain no files or unresolved defects in `main`.
+- Do not change frozen schemas to make implementation easier.
+- Do not add result, adapter, metric, runner, or CLI behavior during Checkpoint 2.

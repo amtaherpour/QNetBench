@@ -10,13 +10,15 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "BSD-3-Clause" }
 authors = [{ name = "QNetBench contributors" }]
-dependencies = []
+dependencies = [
+    "pydantic>=2.8,<3",
+    "PyYAML>=6.0",
+]
 
 [project.optional-dependencies]
 dev = [
     "build>=1.2",
     "jsonschema>=4.23",
-    "PyYAML>=6.0",
     "pytest>=8.2",
     "ruff>=0.6",
 ]

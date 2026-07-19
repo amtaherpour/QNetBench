@@ -1,12 +1,12 @@
 # QNetBench Project State
 
 Last updated (UTC): 2026-07-19
-Status: IN_PROGRESS
+Status: COMPLETE
 Active checkpoint: 6 — Single-run orchestration and CLI
-Last completed checkpoint: 5 — Backend-independent metric engine
+Last completed checkpoint: 6 — Single-run orchestration and CLI
 Branch: `checkpoint-06-runner-cli`
-Last good commit: `185a8134f3f33ac22ec918b2bc4b150cf48e5be9`
-Working tree: committed on checkpoint branch
+Last good commit: `3f3008700ea9df06a2532d16a2f53ffc9767a777` (CI run 29700289691)
+Working tree: clean after commit
 
 ## Release target
 
@@ -21,21 +21,30 @@ Working tree: committed on checkpoint branch
 
 ## Environment last verified
 
-- Python: CPython 3.12 required; Checkpoint 6 CI pending
+- Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
 - Install command: `python -m pip install -e ".[dev]"`
 - SeQUeNCe revision/environment: N/A
 
 ## Last passing commands
 
-- Checkpoint 5 final CI run 29699955879 passed the accumulated quality gate.
-- Focused runner and CLI tests plus module-level CLI smoke pass in development; Python 3.12 CI pending.
+GitHub Actions CI run 29700289691:
+
+- editable development installation — passed
+- `python -m ruff check .` — passed
+- `python -m ruff format --check .` — passed
+- contract, specification, result/artifact, adapter, and metric tests — passed
+- runner and CLI tests — passed
+- installed `qnetbench` CLI smoke — passed
+- full repository test suite — passed
+- `git diff --check` — passed
 
 ## What works now
 
 - Checkpoints 0–5 capabilities.
-- Adapter-neutral single-run orchestration, execution hashes, run IDs, provenance manifests, metrics, summaries, and atomic bundles are implemented on the checkpoint branch.
-- CLI commands `validate`, `run`, `summarize`, and `validate-result` are implemented.
+- Adapter-neutral single-run orchestration, execution hashes, run IDs, exact provenance manifests, metrics, summaries, and atomic bundles.
+- CLI commands `validate`, `run`, `summarize`, and `validate-result`.
 - Support and execution failures produce validated failed bundles and nonzero exits.
+- Existing output is rejected unless overwrite is explicit.
 
 ## What is intentionally not implemented
 
@@ -43,7 +52,7 @@ Working tree: committed on checkpoint branch
 
 ## Open blockers
 
-- None; Checkpoint 6 Python 3.12 CI verification pending.
+- None.
 
 ## Frozen assumptions in force
 
@@ -54,8 +63,14 @@ Working tree: committed on checkpoint branch
 ## Latest checkpoint evidence
 
 - Report: `docs/ai_handoff/checkpoint_06_report.md`
+- CI run: 29700289691
 - Focused tests: `tests/runners/` and `tests/cli/`
 
 ## Next allowed action
 
-Complete Checkpoint 6 verification only. Do not begin Checkpoint 7 before the exact final head is green and recorded.
+Execute Checkpoint 7 only: frozen four-benchmark catalog and user-facing mock documentation.
+
+## Notes for the next agent
+
+- Checkpoint 7 may add the `list` command and exactly four frozen benchmark files.
+- Do not add sweeps, plots, or SeQUeNCe behavior.

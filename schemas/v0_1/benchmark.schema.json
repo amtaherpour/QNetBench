@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qnetbench.dev/schemas/v0_1/benchmark.schema.json",
+  "title": "QNetBench BenchmarkSpec v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "benchmark_id",
+    "title",
+    "description",
+    "network",
+    "physical_profile",
+    "workload",
+    "protocol",
+    "requested_metrics",
+    "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "benchmark_id": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"},
+    "title": {"type": "string", "minLength": 1},
+    "description": {"type": "string", "minLength": 1},
+    "network": {
+      "type": "object", "additionalProperties": false, "required": ["nodes", "links"],
+      "properties": {
+        "nodes": {"type": "array", "minItems": 2, "items": {"type": "object", "additionalProperties": false, "required": ["node_id"], "properties": {"node_id": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"}}}},
+        "links": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["link_id", "endpoints", "length_km"], "properties": {"link_id": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"}, "endpoints": {"type": "array", "prefixItems": [{"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"}, {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"}], "items": false, "minItems": 2, "maxItems": 2}, "length_km": {"type": "number", "exclusiveMinimum": 0}}}}
+      }
+    },
+    "physical_profile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["memory_count_per_node", "memory_coherence_time_s", "memory_frequency_hz", "memory_efficiency", "detector_efficiency", "fiber_attenuation_db_per_km", "quantum_propagation_speed_km_per_s", "classical_propagation_speed_km_per_s", "link_fidelity", "swap_success_probability", "swap_fidelity_factor"],
+      "properties": {
+        "memory_count_per_node": {"type": "integer", "minimum": 1}, "memory_coherence_time_s": {"type": "number", "exclusiveMinimum": 0}, "memory_frequency_hz": {"type": "number", "exclusiveMinimum": 0},
+        "memory_efficiency": {"type": "number", "minimum": 0, "maximum": 1}, "detector_efficiency": {"type": "number", "minimum": 0, "maximum": 1}, "fiber_attenuation_db_per_km": {"type": "number", "minimum": 0},
+        "quantum_propagation_speed_km_per_s": {"type": "number", "exclusiveMinimum": 0}, "classical_propagation_speed_km_per_s": {"type": "number", "exclusiveMinimum": 0}, "link_fidelity": {"type": "number", "minimum": 0, "maximum": 1},
+        "swap_success_probability": {"type": "number", "minimum": 0, "maximum": 1}, "swap_fidelity_factor": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "workload": {"type": "object", "additionalProperties": false, "required": ["source", "destination", "request_count", "batch_start_s", "deadline_s"], "properties": {"source": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"}, "destination": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"}, "request_count": {"type": "integer", "minimum": 1}, "batch_start_s": {"type": "number", "minimum": 0}, "deadline_s": {"type": "number", "exclusiveMinimum": 0}}},
+    "protocol": {"type": "object", "additionalProperties": false, "required": ["routing", "shortest_path_tiebreak", "swapping", "purification"], "properties": {"routing": {"const": "shortest_path"}, "shortest_path_tiebreak": {"const": "lexical"}, "swapping": {"enum": ["none", "sequential"]}, "purification": {"const": "none"}}},
+    "requested_metrics": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["request_success_probability", "latency_mean_s", "latency_median_s", "latency_p95_s", "fidelity_mean", "fidelity_median", "throughput_success_per_s", "attempts_per_success"]}},
+    "extensions": {"type": "object", "maxProperties": 0}
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "result_schema_version": "0.1",
+  "run_id": "qnb-v0-1-minimal-mock-1-11111111",
+  "status": "complete",
+  "metrics": {
+    "request_success_probability": 0.5,
+    "latency_mean_s": 0.1
+  }
+}

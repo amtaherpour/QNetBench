@@ -1,0 +1,2 @@
+{"request_id":"request-0001","source":"alice","destination":"bob","submitted_at_s":0.0,"terminal_at_s":0.1,"status":"success","latency_s":0.1,"fidelity":0.94,"attempts":1,"path":["alice","bob"],"failure_reason":null,"metadata":{}}
+{"request_id":"request-0002","source":"alice","destination":"bob","submitted_at_s":0.0,"terminal_at_s":1.0,"status":"timed_out","latency_s":1.0,"fidelity":null,"attempts":2,"path":["alice","bob"],"failure_reason":"deadline exceeded","metadata":{}}

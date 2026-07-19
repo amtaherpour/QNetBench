@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qnetbench.dev/schemas/v0_1/run_manifest.schema.json",
+  "title": "QNetBench RunManifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["result_schema_version", "run_id", "benchmark_id", "benchmark_hash", "execution_hash", "qnetbench_version", "adapter_name", "adapter_version", "backend_name", "backend_version", "seed", "status", "started_at_utc", "ended_at_utc", "measurement_start_s", "measurement_end_s", "expected_request_count", "written_request_count", "python_version", "platform", "warnings", "support_report_digest"],
+  "properties": {
+    "result_schema_version": {"const": "0.1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "benchmark_id": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"},
+    "benchmark_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "execution_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "qnetbench_version": {"type": "string", "minLength": 1},
+    "adapter_name": {"type": "string", "minLength": 1},
+    "adapter_version": {"type": "string", "minLength": 1},
+    "backend_name": {"type": "string", "minLength": 1},
+    "backend_version": {"type": ["string", "null"]},
+    "seed": {"type": "integer"},
+    "status": {"enum": ["complete", "failed"]},
+    "started_at_utc": {"type": "string", "minLength": 1},
+    "ended_at_utc": {"type": "string", "minLength": 1},
+    "measurement_start_s": {"type": "number"},
+    "measurement_end_s": {"type": "number"},
+    "expected_request_count": {"type": "integer", "minimum": 0},
+    "written_request_count": {"type": "integer", "minimum": 0},
+    "python_version": {"type": "string", "minLength": 1},
+    "platform": {"type": "string", "minLength": 1},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "support_report_digest": {"type": "string", "minLength": 1}
+  }
+}

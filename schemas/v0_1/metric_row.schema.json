@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qnetbench.dev/schemas/v0_1/metric_row.schema.json",
+  "title": "QNetBench MetricRow v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["metric_id", "status", "value", "unit", "population_count", "coverage_count"],
+  "properties": {
+    "metric_id": {"enum": ["request_success_probability", "latency_mean_s", "latency_median_s", "latency_p95_s", "fidelity_mean", "fidelity_median", "throughput_success_per_s", "attempts_per_success"]},
+    "status": {"enum": ["ok", "unavailable", "not_applicable"]},
+    "value": {"type": ["number", "null"]},
+    "unit": {"type": ["string", "null"]},
+    "population_count": {"type": "integer", "minimum": 0},
+    "coverage_count": {"type": "integer", "minimum": 0}
+  }
+}

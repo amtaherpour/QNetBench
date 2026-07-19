@@ -1,0 +1,9 @@
+metric_id,status,value,unit,population_count,coverage_count
+request_success_probability,ok,0.5,1,2,2
+latency_mean_s,ok,0.1,s,1,1
+latency_median_s,ok,0.1,s,1,1
+latency_p95_s,ok,0.1,s,1,1
+fidelity_mean,ok,0.94,1,1,1
+fidelity_median,ok,0.94,1,1,1
+throughput_success_per_s,ok,1.0,success/s,1,1
+attempts_per_success,ok,3.0,attempt/success,2,2

@@ -1,9 +1,28 @@
+# Python bytecode and caches
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .ruff_cache/
+
+# Environments
 .venv/
-dist/
+venv/
+env/
+
+# Packaging
 build/
+dist/
 *.egg-info/
+
+# Coverage and test artifacts
+.coverage
+htmlcov/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Project-generated temporary output
 .tmp/

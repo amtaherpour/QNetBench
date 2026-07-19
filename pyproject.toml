@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=69", "wheel"]
+requires = ["setuptools>=69"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -13,11 +13,22 @@ authors = [{ name = "QNetBench contributors" }]
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff", "build"]
+dev = [
+    "build>=1.2",
+    "pytest>=8.2",
+    "ruff>=0.6",
+]
 
 [tool.setuptools.packages.find]
 include = ["qnetbench*"]
 
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
 [tool.ruff]
 line-length = 88
 target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

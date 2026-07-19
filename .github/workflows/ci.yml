@@ -32,7 +32,10 @@ jobs:
       - name: Ruff formatting check
         run: python -m ruff format --check .
 
-      - name: Pytest
+      - name: Contract tests
+        run: python -m pytest -q tests/contracts
+
+      - name: Full test suite
         run: python -m pytest -q
 
       - name: Git whitespace check

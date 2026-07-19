@@ -2,8 +2,8 @@
 
 Status: COMPLETE
 Date (UTC): 2026-07-19
-Branch: `checkpoint-01-contracts`
-Commit: CI-verified head `99c7f087b585597fac8ba90050941fd228e8d38b`; completion metadata committed afterward
+Branch: `main`
+Commit: final-audit head `fdf2facdb4d130cc43e235dc49ca6d7d703bf2f4`; completion metadata committed afterward
 Previous good commit: `6e692b73103f982ecf8d55159a6f28ead9a1fb32`
 Active contract versions: benchmark 0.1 frozen; result 0.1 frozen; metrics 0.1 frozen
 
@@ -43,7 +43,8 @@ Active contract versions: benchmark 0.1 frozen; result 0.1 frozen; metrics 0.1 f
 ## Files edited
 
 - `pyproject.toml`: added PyYAML and jsonschema to the development extra.
-- `PROJECT_STATE.md`: froze contract versions and authorized Checkpoint 2 only.
+- `.github/workflows/ci.yml`: runs the exact standalone contract-test command plus the full suite.
+- `PROJECT_STATE.md`: records the final audit and authorizes Checkpoint 2 only.
 
 ## Tests added or changed
 
@@ -51,14 +52,14 @@ Active contract versions: benchmark 0.1 frozen; result 0.1 frozen; metrics 0.1 f
 
 ## Commands run
 
-GitHub Actions CI run 29695800416:
+GitHub Actions final-audit CI run 29696426937:
 
 | Command | Exit | Result |
 |---|---:|---|
 | `python -m pip install -e ".[dev]"` | 0 | Development installation passed. |
 | `python -m ruff check .` | 0 | Lint passed. |
 | `python -m ruff format --check .` | 0 | Formatting check passed. |
-| `python -m pytest -q tests/contracts` | 0 | Covered by the passing full suite; contract tests passed. |
+| `python -m pytest -q tests/contracts` | 0 | Contract tests passed. |
 | `python -m pytest -q` | 0 | Full test suite passed. |
 | `git diff --check` | 0 | Whitespace check passed. |
 
@@ -66,7 +67,7 @@ GitHub Actions CI run 29695800416:
 
 - Normative schemas: `schemas/v0_1/*.schema.json`
 - Valid examples: `examples/contracts/`
-- CI run: 29695800416, job `quality`, conclusion `success`
+- Final-audit CI run: 29696426937, conclusion `success`
 
 ## Contract and architecture checks
 
@@ -83,16 +84,17 @@ GitHub Actions CI run 29695800416:
 
 ## Deviations from checkpoint plan
 
-- The default CI runs the full suite rather than a separate `tests/contracts` step; the contract tests are included and passed in that suite.
+- None after final audit. The exact command matrix is now represented in CI and passed.
 
 ## Open issues and risks
 
 - None blocking Checkpoint 2.
+- Earlier failed CI attempts remain visible in GitHub's immutable workflow history, but their defects were corrected and are not present in `main`.
 
 ## PROJECT_STATE.md update
 
 - Current checkpoint/result: Checkpoint 1 complete.
-- Last passing evidence: GitHub Actions CI run 29695800416.
+- Last passing evidence: GitHub Actions final-audit CI run 29696426937.
 - Next allowed action: Checkpoint 2 only.
 
 ## Final status

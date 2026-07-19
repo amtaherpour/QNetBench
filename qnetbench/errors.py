@@ -37,3 +37,7 @@ class UnsupportedBenchmarkError(AdapterError):
     def __init__(self, message: str, *, report: object | None = None) -> None:
         self.report = report
         super().__init__(message)
+
+
+class MetricComputationError(QNetBenchError):
+    """Raised when canonical inputs cannot produce standard metrics."""

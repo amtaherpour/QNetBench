@@ -2,10 +2,10 @@
 
 Last updated (UTC): 2026-07-19
 Status: COMPLETE
-Active checkpoint: 4 — Adapter interface, registry, and deterministic mock adapter
-Last completed checkpoint: 4 — Adapter interface, registry, and deterministic mock adapter
-Branch: `checkpoint-04-mock-adapter`
-Last good commit: `bf7a4bc175cda21b8a8414d96b9b63153e95c912` (CI run 29699627204)
+Active checkpoint: 5 — Backend-independent metric engine
+Last completed checkpoint: 5 — Backend-independent metric engine
+Branch: `checkpoint-05-metrics`
+Last good commit: `5714cd3a3abcb88a54e2944665bcca2c88c8df9a` (CI run 29699911257)
 Working tree: clean after commit
 
 ## Release target
@@ -27,7 +27,7 @@ Working tree: clean after commit
 
 ## Last passing commands
 
-GitHub Actions CI run 29699627204:
+GitHub Actions CI run 29699911257:
 
 - editable development installation — passed
 - `python -m ruff check .` — passed
@@ -36,20 +36,20 @@ GitHub Actions CI run 29699627204:
 - specification tests — passed
 - result and artifact tests — passed
 - adapter tests — passed
+- metric tests — passed
 - full repository test suite — passed
 - `git diff --check` — passed
 
 ## What works now
 
-- Frozen contracts, strict BenchmarkSpec runtime, and canonical result bundles from Checkpoints 1–3.
-- Adapter interface, structured support reports, registry, and deterministic synthetic mock adapter.
-- Same benchmark hash, seed, and mock algorithm version produce byte-stable canonical records.
-- Alternate seed behavior is reproducibly different.
-- Unsupported protocol and extension paths are rejected before execution.
+- Checkpoints 0–4 capabilities, including the deterministic synthetic mock adapter.
+- The frozen v0.1 eight-metric registry and backend-independent metric engine.
+- Explicit unavailable states, stable coverage/population counts, nearest-rank p95, and measurement-window handling.
+- Metrics consume only canonical complete manifests and request records.
 
 ## What is intentionally not implemented
 
-- Metric computation, runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
+- Runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
 
 ## Open blockers
 
@@ -57,23 +57,21 @@ GitHub Actions CI run 29699627204:
 
 ## Frozen assumptions in force
 
-- Adapters emit canonical records in memory and do not compute metrics or write final bundles.
-- Mock output is synthetic and not a physics baseline.
-- No real simulator dependency or `qnetbench/adapters/sequence.py` is present.
-- Unsupported paths are reported before execution.
+- Metrics consume only a canonical complete run manifest and canonical request records.
+- Metrics do not read summaries, events, raw output, adapters, or simulator objects.
+- Metric IDs, units, populations, and edge-case semantics match contract v0.1.
 
 ## Latest checkpoint evidence
 
-- Report: `docs/ai_handoff/checkpoint_04_report.md`
-- CI run: 29699627204
-- Golden records: `tests/fixtures/mock/golden_seed_1.jsonl`
-- Mock algorithm version: `1.0`
+- Report: `docs/ai_handoff/checkpoint_05_report.md`
+- CI run: 29699911257
+- Focused tests: `tests/metrics/`
 
 ## Next allowed action
 
-Execute Checkpoint 5 only: backend-independent metric engine.
+Execute Checkpoint 6 only: single-run orchestration and CLI through the mock backend.
 
 ## Notes for the next agent
 
-- Metrics may consume only canonical manifests and request records.
-- Metrics must not import adapters, artifacts, raw output, or simulator packages.
+- The runner must remain adapter-neutral.
+- Summary output is derived convenience data and never a metric source.

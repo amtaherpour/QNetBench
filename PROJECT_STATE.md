@@ -2,11 +2,11 @@
 
 Last updated (UTC): 2026-07-19
 Status: COMPLETE
-Active checkpoint: 3 — Canonical result models and artifact bundle I/O
-Last completed checkpoint: 3 — Canonical result models and artifact bundle I/O
-Branch: `main`
-Last good commit: `eafee05af0bde802f3439bbe30b1869dae5e08f8` (independent-audit CI run 29698162327)
-Working tree: clean after merge
+Active checkpoint: 4 — Adapter interface, registry, and deterministic mock adapter
+Last completed checkpoint: 4 — Adapter interface, registry, and deterministic mock adapter
+Branch: `checkpoint-04-mock-adapter`
+Last good commit: `bf7a4bc175cda21b8a8414d96b9b63153e95c912` (CI run 29699627204)
+Working tree: clean after commit
 
 ## Release target
 
@@ -27,30 +27,29 @@ Working tree: clean after merge
 
 ## Last passing commands
 
-GitHub Actions independent-audit CI run 29698162327:
+GitHub Actions CI run 29699627204:
 
-- `python -m pip install -e ".[dev]"` — passed
+- editable development installation — passed
 - `python -m ruff check .` — passed
 - `python -m ruff format --check .` — passed
-- `python -m pytest -q tests/contracts` — passed
-- `python -m pytest -q tests/spec` — passed
-- `python -m pytest -q tests/results tests/artifacts` — passed
-- `python -m pytest -q` — passed
+- frozen contract tests — passed
+- specification tests — passed
+- result and artifact tests — passed
+- adapter tests — passed
+- full repository test suite — passed
 - `git diff --check` — passed
 
 ## What works now
 
-- Frozen contracts and strict BenchmarkSpec runtime from Checkpoints 1–2.
-- Strict canonical run, request, metric-row, summary, and error models implement Result Contract v0.1.
-- Complete and failed bundles are safely read, cross-validated, written through temporary siblings, and revalidated before finalization.
-- Duplicate or missing requests, count/hash mismatches, invalid times, malformed JSONL, non-finite values, and failed-run metric artifacts are rejected.
-- Existing destinations require explicit overwrite; failed writes clean temporary output.
-- Optional `events.jsonl` and `raw/` do not influence metric-independent validation.
-- The merged Checkpoint 3 tree was independently revalidated after completion.
+- Frozen contracts, strict BenchmarkSpec runtime, and canonical result bundles from Checkpoints 1–3.
+- Adapter interface, structured support reports, registry, and deterministic synthetic mock adapter.
+- Same benchmark hash, seed, and mock algorithm version produce byte-stable canonical records.
+- Alternate seed behavior is reproducibly different.
+- Unsupported protocol and extension paths are rejected before execution.
 
 ## What is intentionally not implemented
 
-- Adapters, metric computation, runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
+- Metric computation, runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
 
 ## Open blockers
 
@@ -58,26 +57,23 @@ GitHub Actions independent-audit CI run 29698162327:
 
 ## Frozen assumptions in force
 
-- Canonical result models implement frozen Contract v0.1 without schema changes.
-- Complete bundles require one unique terminal record per planned request.
-- Failed bundles contain no standard metrics.
-- `events.jsonl` and `raw/` are optional and ignored by metric-independent validation.
-- Existing output is never overwritten without explicit authorization.
+- Adapters emit canonical records in memory and do not compute metrics or write final bundles.
+- Mock output is synthetic and not a physics baseline.
+- No real simulator dependency or `qnetbench/adapters/sequence.py` is present.
+- Unsupported paths are reported before execution.
 
 ## Latest checkpoint evidence
 
-- Report: `docs/ai_handoff/checkpoint_03_report.md`
-- Independent audit: `docs/ai_handoff/checkpoint_03_independent_audit.md`
-- Independent-audit CI run: 29698162327
-- Complete fixture: `tests/fixtures/results/complete_run/`
-- Failed fixture: `tests/fixtures/results/failed_run/`
+- Report: `docs/ai_handoff/checkpoint_04_report.md`
+- CI run: 29699627204
+- Golden records: `tests/fixtures/mock/golden_seed_1.jsonl`
+- Mock algorithm version: `1.0`
 
 ## Next allowed action
 
-Execute Checkpoint 4 only: adapter interface, registry, and deterministic mock adapter.
+Execute Checkpoint 5 only: backend-independent metric engine.
 
 ## Notes for the next agent
 
-- Adapters must emit canonical records in memory and must not compute metrics or write final bundles.
-- Do not add SeQUeNCe or any real simulator dependency during Checkpoint 4.
-- Historical failed workflow notifications do not represent the independently audited merged Checkpoint 3 tree.
+- Metrics may consume only canonical manifests and request records.
+- Metrics must not import adapters, artifacts, raw output, or simulator packages.

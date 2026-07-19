@@ -25,3 +25,15 @@ class ResultValidationError(QNetBenchError):
 
 class ArtifactError(QNetBenchError):
     """Raised when a result bundle cannot be safely read or written."""
+
+
+class AdapterError(QNetBenchError):
+    """Raised for adapter registration or execution failures."""
+
+
+class UnsupportedBenchmarkError(AdapterError):
+    """Raised before execution when an adapter cannot support a benchmark."""
+
+    def __init__(self, message: str, *, report: object | None = None) -> None:
+        self.report = report
+        super().__init__(message)

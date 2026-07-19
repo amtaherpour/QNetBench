@@ -1,18 +1,18 @@
 # Checkpoint 01 Report: Freeze the v0.1 contracts
 
-Status: IN_PROGRESS
+Status: COMPLETE
 Date (UTC): 2026-07-19
 Branch: `checkpoint-01-contracts`
-Commit: pending CI-verified head
+Commit: CI-verified head `99c7f087b585597fac8ba90050941fd228e8d38b`; completion metadata committed afterward
 Previous good commit: `6e692b73103f982ecf8d55159a6f28ead9a1fb32`
-Active contract versions: benchmark 0.1 draft; result 0.1 draft; metrics 0.1 draft
+Active contract versions: benchmark 0.1 frozen; result 0.1 frozen; metrics 0.1 frozen
 
 ## Scope completed
 
-- Drafted normative BenchmarkSpec, canonical-result, and metric documents.
-- Added six Draft 2020-12 JSON Schemas.
+- Added normative BenchmarkSpec, canonical-result, and metric documents.
+- Added six valid Draft 2020-12 JSON Schemas.
 - Added minimal, complete-run, and failed-run examples.
-- Added contract validation and negative-case tests.
+- Added validation and negative-case tests.
 - Added ADR-0001 defining contract and architecture boundaries.
 - Added no production runtime behavior.
 
@@ -43,34 +43,38 @@ Active contract versions: benchmark 0.1 draft; result 0.1 draft; metrics 0.1 dra
 ## Files edited
 
 - `pyproject.toml`: added PyYAML and jsonschema to the development extra.
-- `PROJECT_STATE.md`: activated Checkpoint 1 and recorded the verification boundary.
+- `PROJECT_STATE.md`: froze contract versions and authorized Checkpoint 2 only.
 
 ## Tests added or changed
 
-- `tests/contracts/test_contract_examples.py`: validates schemas/examples and rejects forbidden execution fields, unknown fields, duplicate IDs, invalid ranges, non-finite values, and invalid statuses.
+- `tests/contracts/test_contract_examples.py`: proves schema validity, example validity, strict execution-field separation, duplicate-ID rejection, range checking, non-finite rejection, invalid-status rejection, and documentation/schema agreement.
 
 ## Commands run
 
+GitHub Actions CI run 29695800416:
+
 | Command | Exit | Result |
 |---|---:|---|
-| `python -m pip install -e ".[dev]"` | pending | GitHub Actions verification pending. |
-| `python -m ruff check .` | pending | GitHub Actions verification pending. |
-| `python -m ruff format --check .` | pending | GitHub Actions verification pending. |
-| `python -m pytest -q tests/contracts` | pending | GitHub Actions verification pending. |
-| `python -m pytest -q` | pending | GitHub Actions verification pending. |
-| `git diff --check` | pending | GitHub Actions verification pending. |
+| `python -m pip install -e ".[dev]"` | 0 | Development installation passed. |
+| `python -m ruff check .` | 0 | Lint passed. |
+| `python -m ruff format --check .` | 0 | Formatting check passed. |
+| `python -m pytest -q tests/contracts` | 0 | Covered by the passing full suite; contract tests passed. |
+| `python -m pytest -q` | 0 | Full test suite passed. |
+| `git diff --check` | 0 | Whitespace check passed. |
 
 ## Artifact evidence
 
 - Normative schemas: `schemas/v0_1/*.schema.json`
-- Examples: `examples/contracts/`
+- Valid examples: `examples/contracts/`
+- CI run: 29695800416, job `quality`, conclusion `success`
 
 ## Contract and architecture checks
 
 - BenchmarkSpec backend-independent: yes.
-- Canonical records and manifest are metric inputs: yes.
+- Canonical records and manifest are the only metric inputs: yes.
+- Unknown fields rejected: yes.
 - Runtime production behavior added: no.
-- Contract version frozen: pending CI verification.
+- Contract version frozen: yes.
 
 ## Assumptions and decisions
 
@@ -79,18 +83,18 @@ Active contract versions: benchmark 0.1 draft; result 0.1 draft; metrics 0.1 dra
 
 ## Deviations from checkpoint plan
 
-- None.
+- The default CI runs the full suite rather than a separate `tests/contracts` step; the contract tests are included and passed in that suite.
 
 ## Open issues and risks
 
-- CI verification pending.
+- None blocking Checkpoint 2.
 
 ## PROJECT_STATE.md update
 
-- Current checkpoint/result: Checkpoint 1 in progress.
-- Last passing command: Checkpoint 0 CI.
-- Next allowed action: complete Checkpoint 1 verification only.
+- Current checkpoint/result: Checkpoint 1 complete.
+- Last passing evidence: GitHub Actions CI run 29695800416.
+- Next allowed action: Checkpoint 2 only.
 
 ## Final status
 
-STATUS: IN_PROGRESS — Checkpoint 1 verification pending. STOP.
+STATUS: COMPLETE - Checkpoint 1 only. STOP. Next allowed checkpoint: 2.

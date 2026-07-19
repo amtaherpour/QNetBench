@@ -112,7 +112,10 @@ class MockAdapter(Adapter):
                 issues.append(
                     _support_issue(
                         "protocol.swapping",
-                        f"path with {len(path.nodes)} nodes requires {expected_swapping!r}",
+                        (
+                            f"path with {len(path.nodes)} nodes requires "
+                            f"{expected_swapping!r}"
+                        ),
                     )
                 )
         return SupportReport(

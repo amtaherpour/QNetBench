@@ -41,6 +41,9 @@ jobs:
       - name: Result and artifact tests
         run: python -m pytest -q tests/results tests/artifacts
 
+      - name: Adapter tests
+        run: python -m pytest -q tests/adapters
+
       - name: Full test suite
         run: python -m pytest -q
 

@@ -82,10 +82,16 @@ def test_execution_fields_are_rejected(field):
 
 def test_complete_run_examples_validate():
     directory = EXAMPLES / "complete_run"
-    benchmark = yaml.safe_load((directory / "benchmark.yaml").read_text())
-    validator("benchmark.schema.json").validate(benchmark)
-    validator("run_manifest.schema.json").validate(load_json(directory / "run_manifest.json"))
-    records = [json.loads(line) for line in (directory / "requests.jsonl").read_text().splitlines()]
+    validator("benchmark.schema.json").validate(
+        yaml.safe_load((directory / "benchmark.yaml").read_text())
+    )
+    validator("run_manifest.schema.json").validate(
+        load_json(directory / "run_manifest.json")
+    )
+    records = [
+        json.loads(line)
+        for line in (directory / "requests.jsonl").read_text().splitlines()
+    ]
     for record in records:
         validator("request_result.schema.json").validate(record)
     assert len({record["request_id"] for record in records}) == len(records)
@@ -131,7 +137,9 @@ def test_negative_contract_cases_fail_for_intended_reason():
     bad["physical_profile"]["memory_frequency_hz"] = float("nan")
     with pytest.raises(AssertionError):
         assert_benchmark_invariants(bad)
-    record = json.loads((EXAMPLES / "complete_run" / "requests.jsonl").read_text().splitlines()[0])
+    record = json.loads(
+        (EXAMPLES / "complete_run" / "requests.jsonl").read_text().splitlines()[0]
+    )
     record["status"] = "mystery"
     with pytest.raises(ValidationError):
         validator("request_result.schema.json").validate(record)

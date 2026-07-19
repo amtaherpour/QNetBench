@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from qnetbench.artifacts import read_bundle, write_complete_bundle
+from qnetbench.artifacts import writer as artifact_writer
 from qnetbench.errors import ArtifactError
 from qnetbench.results import RunManifest
 
@@ -60,6 +61,29 @@ def test_invalid_write_leaves_no_complete_destination(tmp_path: Path) -> None:
         )
     assert not destination.exists()
     assert not list(tmp_path.glob(".invalid.tmp-*"))
+
+
+def test_finalization_failure_cleans_temporary_bundle(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    source = read_bundle(FIXTURES / "complete_run")
+    destination = tmp_path / "finalize-failure"
+
+    def fail_finalize(temp: Path, target: Path, overwrite: bool) -> None:
+        raise OSError("synthetic rename failure")
+
+    monkeypatch.setattr(artifact_writer, "_finalize", fail_finalize)
+    with pytest.raises(OSError, match="synthetic rename failure"):
+        write_complete_bundle(
+            destination,
+            source.benchmark,
+            source.manifest,
+            source.requests,
+            source.metrics,
+            source.summary,
+        )
+    assert not destination.exists()
+    assert not list(tmp_path.glob(".finalize-failure.tmp-*"))
 
 
 def test_malformed_jsonl_reports_file_and_line(tmp_path: Path) -> None:

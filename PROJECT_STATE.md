@@ -1,12 +1,12 @@
 # QNetBench Project State
 
 Last updated (UTC): 2026-07-19
-Status: IN_PROGRESS
+Status: COMPLETE
 Active checkpoint: 3 — Canonical result models and artifact bundle I/O
-Last completed checkpoint: 2 — Benchmark loading, normalization, and hashing
-Branch: `checkpoint-03-result-bundles`
-Last good commit: `675e016f7431d40e0679e3945b4db74bfd211f68`
-Working tree: committed on checkpoint branch
+Last completed checkpoint: 3 — Canonical result models and artifact bundle I/O
+Branch: `main`
+Last good commit: `995f0ce9cb353f457e7119b63ee70a57ceb90b02` (CI run 29697824348)
+Working tree: clean after merge
 
 ## Release target
 
@@ -21,20 +21,31 @@ Working tree: committed on checkpoint branch
 
 ## Environment last verified
 
-- Python: CPython 3.12 required; GitHub Actions verification pending
+- Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
 - Install command: `python -m pip install -e ".[dev]"`
 - SeQUeNCe revision/environment: N/A
 
 ## Last passing commands
 
-- Checkpoint 2 CI run 29697202931 passed.
-- Checkpoint 3 focused result/artifact tests pass locally on Python 3.13.5; Python 3.12 CI pending.
+GitHub Actions CI run 29697824348:
+
+- `python -m pip install -e ".[dev]"` — passed
+- `python -m ruff check .` — passed
+- `python -m ruff format --check .` — passed
+- `python -m pytest -q tests/contracts` — passed
+- `python -m pytest -q tests/spec` — passed
+- `python -m pytest -q tests/results tests/artifacts` — passed
+- `python -m pytest -q` — passed
+- `git diff --check` — passed
 
 ## What works now
 
 - Frozen contracts and strict BenchmarkSpec runtime from Checkpoints 1–2.
-- Canonical result models, cross-record validation, safe bundle readers, and atomic writers are implemented on the checkpoint branch.
-- Complete and failed fixture bundles round-trip locally.
+- Strict canonical run, request, metric-row, summary, and error models implement Result Contract v0.1.
+- Complete and failed bundles are safely read, cross-validated, written through temporary siblings, and revalidated before finalization.
+- Duplicate or missing requests, count/hash mismatches, invalid times, malformed JSONL, non-finite values, and failed-run metric artifacts are rejected.
+- Existing destinations require explicit overwrite; failed writes clean temporary output.
+- Optional `events.jsonl` and `raw/` do not influence metric-independent validation.
 
 ## What is intentionally not implemented
 
@@ -42,7 +53,7 @@ Working tree: committed on checkpoint branch
 
 ## Open blockers
 
-- None; Checkpoint 3 Python 3.12 CI verification pending.
+- None.
 
 ## Frozen assumptions in force
 
@@ -55,14 +66,15 @@ Working tree: committed on checkpoint branch
 ## Latest checkpoint evidence
 
 - Report: `docs/ai_handoff/checkpoint_03_report.md`
+- CI run: 29697824348
 - Complete fixture: `tests/fixtures/results/complete_run/`
 - Failed fixture: `tests/fixtures/results/failed_run/`
 
 ## Next allowed action
 
-Complete Checkpoint 3 verification only. Do not begin Checkpoint 4 until all required commands pass and the report is complete.
+Execute Checkpoint 4 only: adapter interface, registry, and deterministic mock adapter.
 
 ## Notes for the next agent
 
-- Do not add adapters or metric computation during Checkpoint 3.
-- Do not change frozen schemas for implementation convenience.
+- Adapters must emit canonical records in memory and must not compute metrics or write final bundles.
+- Do not add SeQUeNCe or any real simulator dependency during Checkpoint 4.

@@ -1,12 +1,12 @@
 # QNetBench Project State
 
 Last updated (UTC): 2026-07-19
-Status: COMPLETE
-Active checkpoint: 5 — Backend-independent metric engine
+Status: IN_PROGRESS
+Active checkpoint: 6 — Single-run orchestration and CLI
 Last completed checkpoint: 5 — Backend-independent metric engine
-Branch: `checkpoint-05-metrics`
-Last good commit: `5714cd3a3abcb88a54e2944665bcca2c88c8df9a` (CI run 29699911257)
-Working tree: clean after commit
+Branch: `checkpoint-06-runner-cli`
+Last good commit: `185a8134f3f33ac22ec918b2bc4b150cf48e5be9`
+Working tree: committed on checkpoint branch
 
 ## Release target
 
@@ -21,57 +21,41 @@ Working tree: clean after commit
 
 ## Environment last verified
 
-- Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
+- Python: CPython 3.12 required; Checkpoint 6 CI pending
 - Install command: `python -m pip install -e ".[dev]"`
 - SeQUeNCe revision/environment: N/A
 
 ## Last passing commands
 
-GitHub Actions CI run 29699911257:
-
-- editable development installation — passed
-- `python -m ruff check .` — passed
-- `python -m ruff format --check .` — passed
-- frozen contract tests — passed
-- specification tests — passed
-- result and artifact tests — passed
-- adapter tests — passed
-- metric tests — passed
-- full repository test suite — passed
-- `git diff --check` — passed
+- Checkpoint 5 final CI run 29699955879 passed the accumulated quality gate.
+- Focused runner and CLI tests plus module-level CLI smoke pass in development; Python 3.12 CI pending.
 
 ## What works now
 
-- Checkpoints 0–4 capabilities, including the deterministic synthetic mock adapter.
-- The frozen v0.1 eight-metric registry and backend-independent metric engine.
-- Explicit unavailable states, stable coverage/population counts, nearest-rank p95, and measurement-window handling.
-- Metrics consume only canonical complete manifests and request records.
+- Checkpoints 0–5 capabilities.
+- Adapter-neutral single-run orchestration, execution hashes, run IDs, provenance manifests, metrics, summaries, and atomic bundles are implemented on the checkpoint branch.
+- CLI commands `validate`, `run`, `summarize`, and `validate-result` are implemented.
+- Support and execution failures produce validated failed bundles and nonzero exits.
 
 ## What is intentionally not implemented
 
-- Runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
+- Benchmark catalog/list command, sweeps, plots, and SeQUeNCe integration.
 
 ## Open blockers
 
-- None.
+- None; Checkpoint 6 Python 3.12 CI verification pending.
 
 ## Frozen assumptions in force
 
-- Metrics consume only a canonical complete run manifest and canonical request records.
-- Metrics do not read summaries, events, raw output, adapters, or simulator objects.
-- Metric IDs, units, populations, and edge-case semantics match contract v0.1.
+- Execution hashes include benchmark hash, backend identity, seed, and execution options but exclude timestamps and output paths.
+- The runner is adapter-neutral and uses only registry-facing adapter APIs.
+- Saved summaries are derived convenience data and never metric inputs.
 
 ## Latest checkpoint evidence
 
-- Report: `docs/ai_handoff/checkpoint_05_report.md`
-- CI run: 29699911257
-- Focused tests: `tests/metrics/`
+- Report: `docs/ai_handoff/checkpoint_06_report.md`
+- Focused tests: `tests/runners/` and `tests/cli/`
 
 ## Next allowed action
 
-Execute Checkpoint 6 only: single-run orchestration and CLI through the mock backend.
-
-## Notes for the next agent
-
-- The runner must remain adapter-neutral.
-- Summary output is derived convenience data and never a metric source.
+Complete Checkpoint 6 verification only. Do not begin Checkpoint 7 before the exact final head is green and recorded.

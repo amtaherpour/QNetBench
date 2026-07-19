@@ -14,4 +14,4 @@ def test_validate_success_and_invalid_field_path() -> None:
         app, ["validate", "tests/fixtures/spec/invalid_unknown_field.yaml"]
     )
     assert bad.exit_code != 0
-    assert "unexpected" in bad.stderr
+    assert "backend" in bad.stderr

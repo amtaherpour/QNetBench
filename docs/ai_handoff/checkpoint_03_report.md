@@ -110,14 +110,23 @@ Representative invariant failure: `requests[1].request_id duplicates requests[0]
 
 - The default CI includes an explicit focused result/artifact test step in addition to the full suite.
 
+## Independent post-merge audit
+
+- Audited merged base: `898c1acdf9e36a2e15582748b1cbb7554d5c97c1`.
+- Audit branch: `checkpoint-03-independent-audit`.
+- Audit commit: `eafee05af0bde802f3439bbe30b1869dae5e08f8`.
+- GitHub Actions CI run 29698162327 passed installation, lint, formatting, contract tests, specification tests, result/artifact tests, the full suite, and whitespace checks on Python 3.12.
+- The audit changed no product code or frozen contracts.
+- Audit report: `docs/ai_handoff/checkpoint_03_independent_audit.md`.
+
 ## Open issues and risks
 
 - None blocking Checkpoint 4.
 
 ## PROJECT_STATE.md update
 
-- Current checkpoint/result: Checkpoint 3 complete.
-- Last passing evidence: GitHub Actions CI run 29697824348.
+- Current checkpoint/result: Checkpoint 3 complete and independently revalidated.
+- Last passing evidence: GitHub Actions independent-audit CI run 29698162327.
 - Next allowed action: Checkpoint 4 only.
 
 ## Final status

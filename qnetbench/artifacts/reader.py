@@ -134,8 +134,7 @@ def read_bundle(source: str | Path) -> RunBundle:
         RunManifest,
     )
 
-    requests_path = directory / "requests.jsonl"
-    requests = _read_requests(requests_path) if requests_path.is_file() else ()
+    requests: tuple[RequestResult, ...] = ()
     metrics: tuple[MetricRow, ...] = ()
     summary: Summary | None = None
     error: ErrorRecord | None = None

@@ -50,14 +50,25 @@ jobs:
       - name: Runner and CLI tests
         run: python -m pytest -q tests/runners tests/cli
 
-      - name: Installed CLI smoke
+      - name: Catalog tests
+        run: python -m pytest -q tests/catalog tests/cli/test_list.py
+
+      - name: Frozen catalog CLI smoke
         run: |
-          qnetbench --help
-          qnetbench validate examples/contracts/minimal_benchmark.yaml
+          qnetbench list
           tmp_dir="$(mktemp -d)"
-          qnetbench run examples/contracts/minimal_benchmark.yaml --backend mock --seed 5 --out "$tmp_dir/run"
-          qnetbench validate-result "$tmp_dir/run"
-          qnetbench summarize "$tmp_dir/run"
+          for benchmark in \
+            benchmarks/v0_1/link_2_batch.yaml \
+            benchmarks/v0_1/chain_3_batch.yaml \
+            benchmarks/v0_1/chain_5_batch.yaml \
+            benchmarks/v0_1/grid_3x3_batch.yaml
+          do
+            qnetbench validate "$benchmark"
+            name="$(basename "$benchmark" .yaml)"
+            qnetbench run "$benchmark" --backend mock --seed 1 --out "$tmp_dir/$name"
+            qnetbench validate-result "$tmp_dir/$name"
+            qnetbench summarize "$tmp_dir/$name" > /dev/null
+          done
 
       - name: Full test suite
         run: python -m pytest -q

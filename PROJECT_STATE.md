@@ -2,10 +2,10 @@
 
 Last updated (UTC): 2026-07-19
 Status: COMPLETE
-Active checkpoint: 6 — Single-run orchestration and CLI
-Last completed checkpoint: 6 — Single-run orchestration and CLI
-Branch: `checkpoint-06-runner-cli`
-Last good commit: `3f3008700ea9df06a2532d16a2f53ffc9767a777` (CI run 29700289691)
+Active checkpoint: 7 — Frozen benchmark catalog and user-facing mock documentation
+Last completed checkpoint: 7 — Frozen benchmark catalog and user-facing mock documentation
+Branch: `checkpoint-07-catalog`
+Last good commit: `c9163111d65d2b1d945a6a947824fa2594344f27` (CI run 29700632114)
 Working tree: clean after commit
 
 ## Release target
@@ -27,28 +27,28 @@ Working tree: clean after commit
 
 ## Last passing commands
 
-GitHub Actions CI run 29700289691:
+GitHub Actions CI run 29700632114:
 
 - editable development installation — passed
 - `python -m ruff check .` — passed
 - `python -m ruff format --check .` — passed
-- contract, specification, result/artifact, adapter, and metric tests — passed
-- runner and CLI tests — passed
-- installed `qnetbench` CLI smoke — passed
+- all focused suites from contracts through runners/CLI — passed
+- catalog and `list` tests — passed
+- installed four-benchmark catalog CLI smoke — passed
 - full repository test suite — passed
 - `git diff --check` — passed
 
 ## What works now
 
-- Checkpoints 0–5 capabilities.
-- Adapter-neutral single-run orchestration, execution hashes, run IDs, exact provenance manifests, metrics, summaries, and atomic bundles.
-- CLI commands `validate`, `run`, `summarize`, and `validate-result`.
-- Support and execution failures produce validated failed bundles and nonzero exits.
-- Existing output is rejected unless overwrite is explicit.
+- Checkpoints 0–6 capabilities.
+- Exactly four static v0.1 benchmarks, stable catalog discovery, and the `list` command.
+- All four benchmarks validate, execute through the deterministic mock single-run pipeline, and produce bundles that revalidate.
+- Frozen IDs, scientific values, request counts, topology choices, and normalized hashes are recorded.
+- User documentation describes only implemented mock behavior and marks SeQUeNCe not started.
 
 ## What is intentionally not implemented
 
-- Benchmark catalog/list command, sweeps, plots, and SeQUeNCe integration.
+- Sweeps, aggregation, plots, and SeQUeNCe research or integration.
 
 ## Open blockers
 
@@ -56,21 +56,23 @@ GitHub Actions CI run 29700289691:
 
 ## Frozen assumptions in force
 
-- Execution hashes include benchmark hash, backend identity, seed, and execution options but exclude timestamps and output paths.
-- The runner is adapter-neutral and uses only registry-facing adapter APIs.
-- Saved summaries are derived convenience data and never metric inputs.
+- The four benchmark files, identifiers, values, and recorded hashes are frozen after Checkpoint 7.
+- All benchmark extensions are empty; backend, seed, output, and sweep concerns remain external.
+- Grid routing uses the lexicographically smallest equal-length shortest path.
+- `mock_pipeline_ready` remains false until the independent Checkpoint 8 gate.
 
 ## Latest checkpoint evidence
 
-- Report: `docs/ai_handoff/checkpoint_06_report.md`
-- CI run: 29700289691
-- Focused tests: `tests/runners/` and `tests/cli/`
+- Report: `docs/ai_handoff/checkpoint_07_report.md`
+- CI run: 29700632114
+- Catalog: `benchmarks/v0_1/`
+- Hash registry: `benchmarks/v0_1/README.md`
 
 ## Next allowed action
 
-Execute Checkpoint 7 only: frozen four-benchmark catalog and user-facing mock documentation.
+Perform a cumulative post-Checkpoint-7 audit only. Do not begin Checkpoint 8 until that audit is green and recorded.
 
 ## Notes for the next agent
 
-- Checkpoint 7 may add the `list` command and exactly four frozen benchmark files.
-- Do not add sweeps, plots, or SeQUeNCe behavior.
+- Re-run the entire accumulated Python 3.12 quality gate from merged `main`.
+- Keep `mock_pipeline_ready` false; Checkpoint 8 has not started.

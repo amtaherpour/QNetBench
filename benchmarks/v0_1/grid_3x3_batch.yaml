@@ -1,0 +1,85 @@
+schema_version: "0.1"
+benchmark_id: qnb-v0-1-grid-3x3-batch
+title: Three-by-three grid batch
+description: Fixed corner-to-corner batch on a square grid with lexical shortest-path tie-breaking.
+network:
+  nodes:
+    - node_id: n00
+    - node_id: n01
+    - node_id: n02
+    - node_id: n10
+    - node_id: n11
+    - node_id: n12
+    - node_id: n20
+    - node_id: n21
+    - node_id: n22
+  links:
+    - link_id: n00-n01
+      endpoints: [n00, n01]
+      length_km: 5.0
+    - link_id: n01-n02
+      endpoints: [n01, n02]
+      length_km: 5.0
+    - link_id: n10-n11
+      endpoints: [n10, n11]
+      length_km: 5.0
+    - link_id: n11-n12
+      endpoints: [n11, n12]
+      length_km: 5.0
+    - link_id: n20-n21
+      endpoints: [n20, n21]
+      length_km: 5.0
+    - link_id: n21-n22
+      endpoints: [n21, n22]
+      length_km: 5.0
+    - link_id: n00-n10
+      endpoints: [n00, n10]
+      length_km: 5.0
+    - link_id: n10-n20
+      endpoints: [n10, n20]
+      length_km: 5.0
+    - link_id: n01-n11
+      endpoints: [n01, n11]
+      length_km: 5.0
+    - link_id: n11-n21
+      endpoints: [n11, n21]
+      length_km: 5.0
+    - link_id: n02-n12
+      endpoints: [n02, n12]
+      length_km: 5.0
+    - link_id: n12-n22
+      endpoints: [n12, n22]
+      length_km: 5.0
+physical_profile:
+  memory_count_per_node: 4
+  memory_coherence_time_s: 1.0
+  memory_frequency_hz: 1000.0
+  memory_efficiency: 0.9
+  detector_efficiency: 0.9
+  fiber_attenuation_db_per_km: 0.2
+  quantum_propagation_speed_km_per_s: 200000.0
+  classical_propagation_speed_km_per_s: 200000.0
+  link_fidelity: 0.95
+  swap_success_probability: 0.8
+  swap_fidelity_factor: 0.9
+workload:
+  source: n00
+  destination: n22
+  request_count: 16
+  batch_start_s: 0.0
+  deadline_s: 1.0
+protocol:
+  routing: shortest_path
+  shortest_path_tiebreak: lexical
+  swapping: sequential
+  purification: none
+requested_metrics:
+  - request_success_probability
+  - latency_mean_s
+  - latency_median_s
+  - latency_p95_s
+  - fidelity_mean
+  - fidelity_median
+  - throughput_success_per_s
+  - attempts_per_success
+extensions: {}

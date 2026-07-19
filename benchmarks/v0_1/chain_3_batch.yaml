@@ -1,0 +1,49 @@
+schema_version: "0.1"
+benchmark_id: qnb-v0-1-chain-3-batch
+title: Three-node batch chain
+description: Fixed batch of end-to-end requests across one sequential swap.
+network:
+  nodes:
+    - node_id: node-0
+    - node_id: node-1
+    - node_id: node-2
+  links:
+    - link_id: node-0-node-1
+      endpoints: [node-0, node-1]
+      length_km: 10.0
+    - link_id: node-1-node-2
+      endpoints: [node-1, node-2]
+      length_km: 10.0
+physical_profile:
+  memory_count_per_node: 4
+  memory_coherence_time_s: 1.0
+  memory_frequency_hz: 1000.0
+  memory_efficiency: 0.9
+  detector_efficiency: 0.9
+  fiber_attenuation_db_per_km: 0.2
+  quantum_propagation_speed_km_per_s: 200000.0
+  classical_propagation_speed_km_per_s: 200000.0
+  link_fidelity: 0.95
+  swap_success_probability: 0.8
+  swap_fidelity_factor: 0.9
+workload:
+  source: node-0
+  destination: node-2
+  request_count: 16
+  batch_start_s: 0.0
+  deadline_s: 1.0
+protocol:
+  routing: shortest_path
+  shortest_path_tiebreak: lexical
+  swapping: sequential
+  purification: none
+requested_metrics:
+  - request_success_probability
+  - latency_mean_s
+  - latency_median_s
+  - latency_p95_s
+  - fidelity_mean
+  - fidelity_median
+  - throughput_success_per_s
+  - attempts_per_success
+extensions: {}

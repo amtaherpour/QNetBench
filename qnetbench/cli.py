@@ -9,6 +9,7 @@ from typing import NoReturn
 import typer
 
 from qnetbench.artifacts import read_bundle
+from qnetbench.catalog import catalog_entries
 from qnetbench.errors import QNetBenchError
 from qnetbench.runners import RunRequest, run_single
 from qnetbench.spec import benchmark_hash, load_benchmark
@@ -33,6 +34,21 @@ def validate(benchmark: Path) -> None:
     except QNetBenchError as error:
         _fail(error)
     typer.echo(f"VALID {spec.benchmark_id} {benchmark_hash(spec)}")
+
+
+@app.command("list")
+def list_benchmarks() -> None:
+    """List the four frozen v0.1 catalog benchmarks."""
+    try:
+        entries = catalog_entries()
+    except QNetBenchError as error:
+        _fail(error)
+    typer.echo("benchmark_id\tnodes\tlinks\trequests\tbenchmark_hash")
+    for entry in entries:
+        typer.echo(
+            f"{entry.benchmark_id}\t{entry.node_count}\t{entry.link_count}"
+            f"\t{entry.request_count}\t{entry.benchmark_hash}"
+        )
 
 
 @app.command("run")

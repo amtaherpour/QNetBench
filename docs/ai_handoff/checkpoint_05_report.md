@@ -1,9 +1,9 @@
 # Checkpoint 05 Report: Backend-independent metric engine
 
-Status: IN_PROGRESS
+Status: COMPLETE
 Date (UTC): 2026-07-19
 Branch: `checkpoint-05-metrics`
-Commit: pending CI-verified head
+Commit: CI-verified implementation head `5714cd3a3abcb88a54e2944665bcca2c88c8df9a`; completion metadata committed afterward
 Previous good commit: `feaf0a424c30fb3eb2631bfc138da02fb2b1e678`
 Active contract versions: benchmark 0.1 frozen; result 0.1 frozen; metrics 0.1 frozen
 
@@ -28,7 +28,7 @@ Active contract versions: benchmark 0.1 frozen; result 0.1 frozen; metrics 0.1 f
 
 - `qnetbench/errors.py`: added `MetricComputationError`.
 - `.github/workflows/ci.yml`: added the exact Checkpoint 5 metric test command.
-- `PROJECT_STATE.md`: activated Checkpoint 5 and its verification boundary.
+- `PROJECT_STATE.md`: recorded completion and authorized Checkpoint 6 only.
 
 ## Fixture expectations
 
@@ -51,20 +51,29 @@ An AST-based test scans every `qnetbench/metrics/*.py` import and rejects adapte
 
 ## Commands run
 
-Authoritative Python 3.12 CI verification is pending.
+Authoritative environment: GitHub-hosted Ubuntu 24.04 with CPython 3.12, CI run 29699911257.
 
 | Command | Exit | Result |
 |---|---:|---|
-| `python -m ruff check qnetbench/metrics qnetbench/errors.py tests/metrics` | 0 | Focused lint passed locally. |
-| `python -m ruff format --check qnetbench/metrics qnetbench/errors.py tests/metrics` | 0 | Focused formatting passed locally. |
-| `python -m pytest -q tests/metrics` | 0 | 14 metric tests passed locally. |
-| `python -m pytest -q` | pending | Python 3.12 CI pending. |
-| `git diff --check` | pending | Python 3.12 CI pending. |
+| `python -m pip install -e ".[dev]"` | 0 | Editable installation passed. |
+| `python -m ruff check .` | 0 | Lint passed. |
+| `python -m ruff format --check .` | 0 | Formatting passed after one test-layout correction. |
+| `python -m pytest -q tests/contracts` | 0 | Frozen contract tests passed. |
+| `python -m pytest -q tests/spec` | 0 | Specification tests passed. |
+| `python -m pytest -q tests/results tests/artifacts` | 0 | Result and artifact tests passed. |
+| `python -m pytest -q tests/adapters` | 0 | Adapter tests passed. |
+| `python -m pytest -q tests/metrics` | 0 | Fourteen metric tests passed. |
+| `python -m pytest -q` | 0 | Full repository suite passed. |
+| `git diff --check` | 0 | Whitespace check passed. |
+
+## Quality note
+
+The first branch CI attempt passed lint but identified one file that did not match Ruff's formatter. The file was formatted and the complete accumulated Python 3.12 gate then passed. Only the passing final implementation head is accepted as evidence.
 
 ## Open issues and risks
 
-- Python 3.12 CI verification pending.
+- None blocking Checkpoint 6.
 
 ## Final status
 
-STATUS: IN_PROGRESS — Checkpoint 5 verification pending. STOP.
+STATUS: COMPLETE - Checkpoint 5 only. STOP. Next allowed checkpoint: 6.

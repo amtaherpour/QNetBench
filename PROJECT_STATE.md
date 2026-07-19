@@ -2,10 +2,10 @@
 
 Last updated (UTC): 2026-07-19
 Status: COMPLETE
-Active checkpoint: 2 — Benchmark loading, normalization, and hashing
-Last completed checkpoint: 2 — Benchmark loading, normalization, and hashing
+Active checkpoint: 3 — Canonical result models and artifact bundle I/O
+Last completed checkpoint: 3 — Canonical result models and artifact bundle I/O
 Branch: `main`
-Last good commit: `4258224206e62ad402d673e4fe21cabd452dbfd5` (CI run 29697121906)
+Last good commit: `995f0ce9cb353f457e7119b63ee70a57ceb90b02` (CI run 29697824348)
 Working tree: clean after merge
 
 ## Release target
@@ -27,28 +27,29 @@ Working tree: clean after merge
 
 ## Last passing commands
 
-GitHub Actions CI run 29697121906:
+GitHub Actions CI run 29697824348:
 
 - `python -m pip install -e ".[dev]"` — passed
 - `python -m ruff check .` — passed
 - `python -m ruff format --check .` — passed
 - `python -m pytest -q tests/contracts` — passed
 - `python -m pytest -q tests/spec` — passed
+- `python -m pytest -q tests/results tests/artifacts` — passed
 - `python -m pytest -q` — passed
 - `git diff --check` — passed
 
 ## What works now
 
-- Frozen v0.1 contracts and examples from Checkpoint 1.
-- Strict BenchmarkSpec runtime models conform to the frozen benchmark schema.
-- Safe YAML/JSON loading returns one typed `BenchmarkSpec` or raises a path-aware `ConfigError`.
-- Equivalent source formatting and mapping order produce identical canonical JSON and hashes.
-- The minimal benchmark golden hash is `fa5b7b457debdb5dde5dd35fea3b5186511ed90cfd350327b5cf7ae837618d97`.
-- Specification code has no imports from adapters, artifacts, metrics, results, runners, or simulators.
+- Frozen contracts and strict BenchmarkSpec runtime from Checkpoints 1–2.
+- Strict canonical run, request, metric-row, summary, and error models implement Result Contract v0.1.
+- Complete and failed bundles are safely read, cross-validated, written through temporary siblings, and revalidated before finalization.
+- Duplicate or missing requests, count/hash mismatches, invalid times, malformed JSONL, non-finite values, and failed-run metric artifacts are rejected.
+- Existing destinations require explicit overwrite; failed writes clean temporary output.
+- Optional `events.jsonl` and `raw/` do not influence metric-independent validation.
 
 ## What is intentionally not implemented
 
-- Result artifacts, adapters, metrics implementation, runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
+- Adapters, metric computation, runners, CLI, benchmark catalog, sweeps, plots, and SeQUeNCe integration.
 
 ## Open blockers
 
@@ -56,23 +57,24 @@ GitHub Actions CI run 29697121906:
 
 ## Frozen assumptions in force
 
-- Runtime models implement BenchmarkSpec v0.1 without schema changes.
-- Unknown fields, invalid ranges, duplicate IDs, invalid references, non-finite values, and unsafe YAML constructors are rejected.
-- Canonical hashing uses compact sorted-key UTF-8 JSON and lowercase SHA-256.
-- Backend, seed, output, and sweep concerns remain outside BenchmarkSpec.
+- Canonical result models implement frozen Contract v0.1 without schema changes.
+- Complete bundles require one unique terminal record per planned request.
+- Failed bundles contain no standard metrics.
+- `events.jsonl` and `raw/` are optional and ignored by metric-independent validation.
+- Existing output is never overwritten without explicit authorization.
 
 ## Latest checkpoint evidence
 
-- Report: `docs/ai_handoff/checkpoint_02_report.md`
-- CI run: 29697121906
-- Golden hash: `tests/spec/test_hashing.py`
-- Equivalent fixtures: `tests/fixtures/spec/valid_equivalent.yaml` and `.json`
+- Report: `docs/ai_handoff/checkpoint_03_report.md`
+- CI run: 29697824348
+- Complete fixture: `tests/fixtures/results/complete_run/`
+- Failed fixture: `tests/fixtures/results/failed_run/`
 
 ## Next allowed action
 
-Execute Checkpoint 3 only: canonical result models and artifact bundle I/O.
+Execute Checkpoint 4 only: adapter interface, registry, and deterministic mock adapter.
 
 ## Notes for the next agent
 
-- Implement the frozen result contracts exactly; do not change schemas for convenience.
-- Do not add adapters or metric computation during Checkpoint 3.
+- Adapters must emit canonical records in memory and must not compute metrics or write final bundles.
+- Do not add SeQUeNCe or any real simulator dependency during Checkpoint 4.

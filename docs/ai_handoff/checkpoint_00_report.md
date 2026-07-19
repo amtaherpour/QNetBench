@@ -1,9 +1,9 @@
 # Checkpoint 00 Report: Repository control plane and minimal package skeleton
 
-Status: IN_PROGRESS
+Status: COMPLETE
 Date (UTC): 2026-07-19
-Branch: `main`
-Commit: this clean-rebuild checkpoint commit
+Branch: `checkpoint-00-ci-verification`
+Commit: CI-verified head `361313deaae985875b695a837273c5f01c69db9b`; completion metadata committed afterward on this branch
 Previous good commit: N/A for the rebuilt working tree
 Active contract versions: benchmark 0.1 draft; result 0.1 draft; metrics 0.1 draft
 
@@ -35,7 +35,8 @@ Active contract versions: benchmark 0.1 draft; result 0.1 draft; metrics 0.1 dra
 
 ## Files edited
 
-- None. The current working tree was created from a new root tree.
+- `PROJECT_STATE.md`: recorded passing CI evidence and the Checkpoint 1 boundary.
+- `docs/ai_handoff/checkpoint_00_report.md`: recorded exact Checkpoint 0 results.
 
 ## Tests added or changed
 
@@ -43,17 +44,20 @@ Active contract versions: benchmark 0.1 draft; result 0.1 draft; metrics 0.1 dra
 
 ## Commands run
 
+GitHub Actions CI run 29673928221 used CPython 3.12.13 on Ubuntu 24.04.4.
+
 | Command | Exit | Result |
 |---|---:|---|
-| `python -m pip install -e ".[dev]"` | pending | GitHub Actions verification pending. |
-| `python -m ruff check .` | pending | GitHub Actions verification pending. |
-| `python -m ruff format --check .` | pending | GitHub Actions verification pending. |
-| `python -m pytest -q` | pending | GitHub Actions verification pending. |
-| `git diff --check` | pending | GitHub Actions verification pending. |
+| `python -m pip install -e ".[dev]"` | 0 | Editable package and development dependencies installed successfully. |
+| `python -m ruff check .` | 0 | All checks passed. |
+| `python -m ruff format --check .` | 0 | 2 files already formatted. |
+| `python -m pytest -q` | 0 | 1 passed in 0.01s. |
+| `git diff --check` | 0 | No whitespace errors. |
 
 ## Artifact evidence
 
-- N/A. Checkpoint 0 creates no benchmark or result artifacts.
+- GitHub Actions workflow: CI run 29673928221, job `quality`, conclusion `success`.
+- Checkpoint 0 creates no benchmark or result artifacts.
 
 ## Contract and architecture checks
 
@@ -76,18 +80,19 @@ Active contract versions: benchmark 0.1 draft; result 0.1 draft; metrics 0.1 dra
 ## Deviations from checkpoint plan
 
 - The two planning documents are stored under `docs/planning/` so every future agent can read the authoritative inputs from the repository.
-- Verification is performed by GitHub Actions because this connector edits repository contents but does not provide a local shell.
+- Verification was performed by GitHub Actions because the connector edits repository contents but does not provide a local repository shell.
 
 ## Open issues and risks
 
-- Checkpoint 0 remains in progress until the clean GitHub Actions run is inspected.
+- None blocking Checkpoint 1.
+- GitHub emitted informational Node runtime deprecation warnings for `actions/checkout@v4` and `actions/setup-python@v5`; the workflow still completed successfully.
 
 ## PROJECT_STATE.md update
 
-- Current checkpoint/result: Checkpoint 0 verification pending.
-- Last passing command: pending.
-- Next allowed action: complete Checkpoint 0 verification only.
+- Current checkpoint/result: Checkpoint 0 complete.
+- Last passing evidence: GitHub Actions CI run 29673928221.
+- Next allowed action: Checkpoint 1 only.
 
 ## Final status
 
-STATUS: IN_PROGRESS — Checkpoint 0 verification pending. STOP.
+STATUS: COMPLETE - Checkpoint 0 only. STOP. Next allowed checkpoint: 1.

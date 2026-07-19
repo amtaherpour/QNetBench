@@ -1,12 +1,12 @@
 # QNetBench Project State
 
 Last updated (UTC): 2026-07-19
-Status: IN_PROGRESS
+Status: COMPLETE
 Active checkpoint: 4 — Adapter interface, registry, and deterministic mock adapter
-Last completed checkpoint: 3 — Canonical result models and artifact bundle I/O
+Last completed checkpoint: 4 — Adapter interface, registry, and deterministic mock adapter
 Branch: `checkpoint-04-mock-adapter`
-Last good commit: `ee714b0093d9dff17a941d500af3abb39e66af3e`
-Working tree: committed on checkpoint branch
+Last good commit: `bf7a4bc175cda21b8a8414d96b9b63153e95c912` (CI run 29699627204)
+Working tree: clean after commit
 
 ## Release target
 
@@ -21,20 +21,31 @@ Working tree: committed on checkpoint branch
 
 ## Environment last verified
 
-- Python: CPython 3.12 required; Checkpoint 4 GitHub Actions verification pending
+- Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
 - Install command: `python -m pip install -e ".[dev]"`
 - SeQUeNCe revision/environment: N/A
 
 ## Last passing commands
 
-- Checkpoint 3 independent audit CI run 29698290634 passed the accumulated quality gate.
-- Checkpoint 4 adapter checks pass in the development environment; Python 3.12 CI pending.
+GitHub Actions CI run 29699627204:
+
+- editable development installation — passed
+- `python -m ruff check .` — passed
+- `python -m ruff format --check .` — passed
+- frozen contract tests — passed
+- specification tests — passed
+- result and artifact tests — passed
+- adapter tests — passed
+- full repository test suite — passed
+- `git diff --check` — passed
 
 ## What works now
 
 - Frozen contracts, strict BenchmarkSpec runtime, and canonical result bundles from Checkpoints 1–3.
-- Adapter interface, structured support reports, registry, and deterministic synthetic mock adapter are implemented on the checkpoint branch.
-- Same benchmark hash, seed, and mock algorithm version produce byte-stable records; an alternate seed changes outcomes reproducibly.
+- Adapter interface, structured support reports, registry, and deterministic synthetic mock adapter.
+- Same benchmark hash, seed, and mock algorithm version produce byte-stable canonical records.
+- Alternate seed behavior is reproducibly different.
+- Unsupported protocol and extension paths are rejected before execution.
 
 ## What is intentionally not implemented
 
@@ -42,7 +53,7 @@ Working tree: committed on checkpoint branch
 
 ## Open blockers
 
-- None; Checkpoint 4 Python 3.12 CI verification pending.
+- None.
 
 ## Frozen assumptions in force
 
@@ -54,14 +65,15 @@ Working tree: committed on checkpoint branch
 ## Latest checkpoint evidence
 
 - Report: `docs/ai_handoff/checkpoint_04_report.md`
+- CI run: 29699627204
 - Golden records: `tests/fixtures/mock/golden_seed_1.jsonl`
 - Mock algorithm version: `1.0`
 
 ## Next allowed action
 
-Complete Checkpoint 4 verification only. Do not begin Checkpoint 5 until the exact final branch head passes CI and completion evidence is recorded.
+Execute Checkpoint 5 only: backend-independent metric engine.
 
 ## Notes for the next agent
 
-- Do not present mock values as physically meaningful.
-- Do not add metrics or final bundle writing to adapters.
+- Metrics may consume only canonical manifests and request records.
+- Metrics must not import adapters, artifacts, raw output, or simulator packages.

@@ -19,8 +19,7 @@ def test_latency_metrics_and_nearest_rank_p95(
 def test_zero_success_latency_is_unavailable() -> None:
     requests = (make_request("r1", status="failed", fidelity=None),)
     rows = {
-        row.metric_id: row
-        for row in compute_metrics(make_manifest(requests), requests)
+        row.metric_id: row for row in compute_metrics(make_manifest(requests), requests)
     }
     for metric_id in ("latency_mean_s", "latency_median_s", "latency_p95_s"):
         assert rows[metric_id].status == "unavailable"

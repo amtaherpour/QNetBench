@@ -5,7 +5,7 @@ Status: COMPLETE
 Active checkpoint: 3 — Canonical result models and artifact bundle I/O
 Last completed checkpoint: 3 — Canonical result models and artifact bundle I/O
 Branch: `main`
-Last good commit: `995f0ce9cb353f457e7119b63ee70a57ceb90b02` (CI run 29697824348)
+Last good commit: `eafee05af0bde802f3439bbe30b1869dae5e08f8` (independent-audit CI run 29698162327)
 Working tree: clean after merge
 
 ## Release target
@@ -22,14 +22,14 @@ Working tree: clean after merge
 ## Environment last verified
 
 - Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
-- Install command: `python -m pip install -e ".[dev]"`
+- Install command: `python -m pip install -e "[dev]"`
 - SeQUeNCe revision/environment: N/A
 
 ## Last passing commands
 
-GitHub Actions CI run 29697824348:
+GitHub Actions independent-audit CI run 29698162327:
 
-- `python -m pip install -e ".[dev]"` — passed
+- `python -m pip install -e "[dev]"` — passed
 - `python -m ruff check .` — passed
 - `python -m ruff format --check .` — passed
 - `python -m pytest -q tests/contracts` — passed
@@ -46,6 +46,7 @@ GitHub Actions CI run 29697824348:
 - Duplicate or missing requests, count/hash mismatches, invalid times, malformed JSONL, non-finite values, and failed-run metric artifacts are rejected.
 - Existing destinations require explicit overwrite; failed writes clean temporary output.
 - Optional `events.jsonl` and `raw/` do not influence metric-independent validation.
+- The merged Checkpoint 3 tree was independently revalidated after completion.
 
 ## What is intentionally not implemented
 
@@ -66,7 +67,8 @@ GitHub Actions CI run 29697824348:
 ## Latest checkpoint evidence
 
 - Report: `docs/ai_handoff/checkpoint_03_report.md`
-- CI run: 29697824348
+- Independent audit: `docs/ai_handoff/checkpoint_03_independent_audit.md`
+- Independent-audit CI run: 29698162327
 - Complete fixture: `tests/fixtures/results/complete_run/`
 - Failed fixture: `tests/fixtures/results/failed_run/`
 
@@ -78,3 +80,4 @@ Execute Checkpoint 4 only: adapter interface, registry, and deterministic mock a
 
 - Adapters must emit canonical records in memory and must not compute metrics or write final bundles.
 - Do not add SeQUeNCe or any real simulator dependency during Checkpoint 4.
+- Historical failed workflow notifications do not represent the independently audited merged Checkpoint 3 tree.

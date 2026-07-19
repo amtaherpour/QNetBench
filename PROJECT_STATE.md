@@ -4,9 +4,9 @@ Last updated (UTC): 2026-07-19
 Status: COMPLETE
 Active checkpoint: 7 — Frozen benchmark catalog and user-facing mock documentation
 Last completed checkpoint: 7 — Frozen benchmark catalog and user-facing mock documentation
-Branch: `checkpoint-07-catalog`
-Last good commit: `c9163111d65d2b1d945a6a947824fa2594344f27` (CI run 29700632114)
-Working tree: clean after commit
+Branch: `main`
+Last good commit: `d4b851caa27ed99e0eea8138c7b7f06786b50d5a` (cumulative-audit CI run 29700754803)
+Working tree: clean after merge
 
 ## Release target
 
@@ -27,24 +27,27 @@ Working tree: clean after commit
 
 ## Last passing commands
 
-GitHub Actions CI run 29700632114:
+GitHub Actions cumulative-audit CI run 29700754803:
 
 - editable development installation — passed
 - `python -m ruff check .` — passed
 - `python -m ruff format --check .` — passed
-- all focused suites from contracts through runners/CLI — passed
-- catalog and `list` tests — passed
-- installed four-benchmark catalog CLI smoke — passed
+- contract, specification, result, artifact, adapter, metric, runner, CLI, and catalog tests — passed
+- installed CLI listing and all four frozen mock benchmark run/validate/summarize sequences — passed
 - full repository test suite — passed
 - `git diff --check` — passed
 
 ## What works now
 
-- Checkpoints 0–6 capabilities.
-- Exactly four static v0.1 benchmarks, stable catalog discovery, and the `list` command.
-- All four benchmarks validate, execute through the deterministic mock single-run pipeline, and produce bundles that revalidate.
-- Frozen IDs, scientific values, request counts, topology choices, and normalized hashes are recorded.
-- User documentation describes only implemented mock behavior and marks SeQUeNCe not started.
+- Frozen v0.1 benchmark, result, and metric contracts.
+- Strict benchmark loading, canonicalization, and benchmark hashing.
+- Canonical complete and failed result bundles with validated atomic I/O.
+- Deterministic synthetic mock adapter with structured support reports.
+- Eight backend-independent standard metrics.
+- Adapter-neutral single-run orchestration and exact provenance.
+- CLI commands `list`, `validate`, `run`, `summarize`, and `validate-result`.
+- Exactly four frozen catalog benchmarks, all validated and executed through mock.
+- The complete repository through Checkpoint 7 has been independently revalidated.
 
 ## What is intentionally not implemented
 
@@ -56,23 +59,26 @@ GitHub Actions CI run 29700632114:
 
 ## Frozen assumptions in force
 
-- The four benchmark files, identifiers, values, and recorded hashes are frozen after Checkpoint 7.
+- Files under `schemas/v0_1/` and `docs/contracts/` are unchanged since the final Checkpoint 1 audit.
+- The four benchmark files, identifiers, values, request counts, topology choices, and hashes are frozen.
 - All benchmark extensions are empty; backend, seed, output, and sweep concerns remain external.
 - Grid routing uses the lexicographically smallest equal-length shortest path.
-- `mock_pipeline_ready` remains false until the independent Checkpoint 8 gate.
+- Mock values are synthetic and are not a physics baseline.
+- `mock_pipeline_ready` remains false until Checkpoint 8 is completed.
 
 ## Latest checkpoint evidence
 
-- Report: `docs/ai_handoff/checkpoint_07_report.md`
-- CI run: 29700632114
+- Checkpoint report: `docs/ai_handoff/checkpoint_07_report.md`
+- Cumulative audit: `docs/ai_handoff/checkpoint_07_cumulative_audit.md`
+- Cumulative-audit CI run: 29700754803
 - Catalog: `benchmarks/v0_1/`
 - Hash registry: `benchmarks/v0_1/README.md`
 
 ## Next allowed action
 
-Perform a cumulative post-Checkpoint-7 audit only. Do not begin Checkpoint 8 until that audit is green and recorded.
+Execute Checkpoint 8 only: finite sweep, aggregate analysis, plots, and the mock-pipeline release gate.
 
 ## Notes for the next agent
 
-- Re-run the entire accumulated Python 3.12 quality gate from merged `main`.
-- Keep `mock_pipeline_ready` false; Checkpoint 8 has not started.
+- Do not begin SeQUeNCe research before the Checkpoint 8 mock-pipeline gate is complete.
+- Keep historical failed intermediate CI attempts distinct from the accepted green checkpoint heads.

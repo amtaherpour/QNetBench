@@ -22,14 +22,14 @@ Working tree: clean after merge
 ## Environment last verified
 
 - Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
-- Install command: `python -m pip install -e "[dev]"`
+- Install command: `python -m pip install -e ".[dev]"`
 - SeQUeNCe revision/environment: N/A
 
 ## Last passing commands
 
 GitHub Actions independent-audit CI run 29698162327:
 
-- `python -m pip install -e "[dev]"` — passed
+- `python -m pip install -e ".[dev]"` — passed
 - `python -m ruff check .` — passed
 - `python -m ruff format --check .` — passed
 - `python -m pytest -q tests/contracts` — passed

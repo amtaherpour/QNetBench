@@ -3,4 +3,4 @@
 
 def connector_status() -> str:
     """Return a deterministic status string for connector verification."""
-    return "created"
+    return "updated"

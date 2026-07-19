@@ -1,12 +1,12 @@
 # QNetBench Project State
 
 Last updated (UTC): 2026-07-19
-Status: IN_PROGRESS
+Status: COMPLETE
 Active checkpoint: 5 — Backend-independent metric engine
-Last completed checkpoint: 4 — Adapter interface, registry, and deterministic mock adapter
+Last completed checkpoint: 5 — Backend-independent metric engine
 Branch: `checkpoint-05-metrics`
-Last good commit: `feaf0a424c30fb3eb2631bfc138da02fb2b1e678`
-Working tree: committed on checkpoint branch
+Last good commit: `5714cd3a3abcb88a54e2944665bcca2c88c8df9a` (CI run 29699911257)
+Working tree: clean after commit
 
 ## Release target
 
@@ -21,20 +21,31 @@ Working tree: committed on checkpoint branch
 
 ## Environment last verified
 
-- Python: CPython 3.12 required; Checkpoint 5 CI pending
+- Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
 - Install command: `python -m pip install -e ".[dev]"`
 - SeQUeNCe revision/environment: N/A
 
 ## Last passing commands
 
-- Checkpoint 4 final CI run 29699665088 passed the accumulated quality gate.
-- Focused Checkpoint 5 metric checks pass in the development environment; Python 3.12 CI pending.
+GitHub Actions CI run 29699911257:
+
+- editable development installation — passed
+- `python -m ruff check .` — passed
+- `python -m ruff format --check .` — passed
+- frozen contract tests — passed
+- specification tests — passed
+- result and artifact tests — passed
+- adapter tests — passed
+- metric tests — passed
+- full repository test suite — passed
+- `git diff --check` — passed
 
 ## What works now
 
 - Checkpoints 0–4 capabilities, including the deterministic synthetic mock adapter.
-- The complete v0.1 metric registry and pure metric engine are implemented on the checkpoint branch.
-- Explicit unavailable states, coverage counts, nearest-rank p95, and measurement-window handling are tested.
+- The frozen v0.1 eight-metric registry and backend-independent metric engine.
+- Explicit unavailable states, stable coverage/population counts, nearest-rank p95, and measurement-window handling.
+- Metrics consume only canonical complete manifests and request records.
 
 ## What is intentionally not implemented
 
@@ -42,7 +53,7 @@ Working tree: committed on checkpoint branch
 
 ## Open blockers
 
-- None; Checkpoint 5 Python 3.12 CI verification pending.
+- None.
 
 ## Frozen assumptions in force
 
@@ -53,8 +64,14 @@ Working tree: committed on checkpoint branch
 ## Latest checkpoint evidence
 
 - Report: `docs/ai_handoff/checkpoint_05_report.md`
+- CI run: 29699911257
 - Focused tests: `tests/metrics/`
 
 ## Next allowed action
 
-Complete Checkpoint 5 verification only. Do not begin Checkpoint 6 before the exact final head is green and recorded.
+Execute Checkpoint 6 only: single-run orchestration and CLI through the mock backend.
+
+## Notes for the next agent
+
+- The runner must remain adapter-neutral.
+- Summary output is derived convenience data and never a metric source.

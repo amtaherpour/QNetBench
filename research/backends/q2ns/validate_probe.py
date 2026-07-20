@@ -27,8 +27,13 @@ def main() -> None:
         "ns3_commit": evidence["ns3_commit"],
         "cases": {},
     }
+    cases = summary["cases"]
+    if not isinstance(cases, dict):  # pragma: no cover - defensive
+        raise RuntimeError("summary cases must be a mapping")
     for benchmark_id, case in evidence["cases"].items():
-        normal = tuple(RequestResult.model_validate(row) for row in case["normal"]["records"])
+        normal = tuple(
+            RequestResult.model_validate(row) for row in case["normal"]["records"]
+        )
         failure = tuple(
             RequestResult.model_validate(row)
             for row in case["controlled_failure"]["records"]
@@ -49,11 +54,13 @@ def main() -> None:
             separators=(",", ":"),
             allow_nan=False,
         )
-        summary["cases"][benchmark_id] = {
+        cases[benchmark_id] = {
             "record_count": len(normal),
             "normal_success_count": normal_successes,
             "controlled_failure_success_count": failure_successes,
-            "normal_digest": hashlib.sha256(canonical.encode()).hexdigest(),
+            "normal_digest": hashlib.sha256(
+                canonical.encode("utf-8")
+            ).hexdigest(),
         }
     arguments.output.parent.mkdir(parents=True, exist_ok=True)
     arguments.output.write_text(

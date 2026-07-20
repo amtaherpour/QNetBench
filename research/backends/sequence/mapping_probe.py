@@ -14,7 +14,7 @@ from typing import Any
 
 import networkx as nx
 from sequence.app.request_app import RequestApp
-from sequence.constants import BELL_DIAGONAL_STATE_FORMALISM, SINGLE_HERALDED
+from sequence.constants import BARRET_KOK, KET_VECTOR_FORMALISM
 from sequence.entanglement_management.generation import (
     EntanglementGenerationA,
     EntanglementGenerationB,
@@ -120,8 +120,8 @@ def _node_template(
             }
         },
         "bsm_template": {
-            "encoding_type": "single_heralded",
-            "SingleHeraldedBSM": {"detectors": [detector.copy(), detector.copy()]},
+            "encoding_type": "single_atom",
+            "SingleAtomBSM": {"detectors": [detector.copy(), detector.copy()]},
         },
     }
 
@@ -274,7 +274,7 @@ def run_case(
             output_file="topology.json",
             output_directory=directory,
             stop_time=CONTROL_LEAD_S + spec.workload.deadline_s + 0.01,
-            formalism=BELL_DIAGONAL_STATE_FORMALISM,
+            formalism=KET_VECTOR_FORMALISM,
             node_template=_node_template(spec, detector_efficiency),
         )
         _patch_config(
@@ -286,8 +286,8 @@ def run_case(
                 spec.physical_profile.classical_propagation_speed_km_per_s
             ),
         )
-        EntanglementGenerationA.set_global_type(SINGLE_HERALDED)
-        EntanglementGenerationB.set_global_type(SINGLE_HERALDED)
+        EntanglementGenerationA.set_global_type(BARRET_KOK)
+        EntanglementGenerationB.set_global_type(BARRET_KOK)
         topology = RouterNetTopo(config)
         timeline = topology.get_timeline()
         timeline.seed(seed)
@@ -349,6 +349,8 @@ def run_case(
         "probe_schema_version": "1.0",
         "simulator_id": "sequence",
         "simulator_version": "1.0.0",
+        "generation_protocol": "BARRET_KOK",
+        "quantum_state_formalism": "KET_VECTOR_FORMALISM",
         "benchmark_path": benchmark_path.as_posix(),
         "benchmark_id": spec.benchmark_id,
         "benchmark_hash": benchmark_hash(spec),

@@ -1,0 +1,8 @@
+sweep_schema_version: "0.1"
+sweep_id: qnb-v0-1-link-loss-small
+base_benchmark: ../../benchmarks/v0_1/link_2_batch.yaml
+output_root: link-loss-small-output
+axes:
+  - path: physical_profile.fiber_attenuation_db_per_km
+    values: [0.1, 0.2, 0.3]
+seeds: [1, 2, 3]

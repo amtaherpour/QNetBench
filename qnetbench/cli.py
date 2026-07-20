@@ -1,4 +1,4 @@
-"""Minimal QNetBench command-line interface."""
+"""QNetBench command-line interface."""
 
 from __future__ import annotations
 
@@ -8,16 +8,17 @@ from typing import NoReturn
 
 import typer
 
+from qnetbench.analysis import plot_sweep
 from qnetbench.artifacts import read_bundle
 from qnetbench.catalog import catalog_entries
 from qnetbench.errors import QNetBenchError
-from qnetbench.runners import RunRequest, run_single
+from qnetbench.runners import RunRequest, SweepRequest, run_single, run_sweep
 from qnetbench.spec import benchmark_hash, load_benchmark
 
 app = typer.Typer(
     add_completion=False,
     no_args_is_help=True,
-    help="Validate and run reproducible quantum-network benchmarks.",
+    help="Validate, run, sweep, and analyze reproducible quantum-network benchmarks.",
 )
 
 
@@ -74,6 +75,37 @@ def run_command(
     except QNetBenchError as error:
         _fail(error)
     typer.echo(f"COMPLETE {bundle.manifest.run_id} {path}")
+
+
+@app.command()
+def sweep(
+    sweep_spec: Path,
+    backend: str = typer.Option(..., "--backend"),
+    output: Path = typer.Option(..., "--out"),
+) -> None:
+    """Execute one bounded finite sweep sequentially."""
+    try:
+        path = run_sweep(
+            SweepRequest(
+                sweep_source=sweep_spec,
+                backend=backend,
+                output=output,
+            )
+        )
+    except QNetBenchError as error:
+        _fail(error)
+    typer.echo(f"COMPLETE SWEEP {path}")
+
+
+@app.command()
+def plot(sweep_directory: Path) -> None:
+    """Create the two approved plots from aggregate_metrics.csv."""
+    try:
+        paths = plot_sweep(sweep_directory)
+    except QNetBenchError as error:
+        _fail(error)
+    for path in paths:
+        typer.echo(f"CREATED {path}")
 
 
 @app.command()

@@ -1,12 +1,12 @@
 # QNetBench Project State
 
-Last updated (UTC): 2026-07-19
+Last updated (UTC): 2026-07-20
 Status: COMPLETE
-Active checkpoint: 7 — Frozen benchmark catalog and user-facing mock documentation
-Last completed checkpoint: 7 — Frozen benchmark catalog and user-facing mock documentation
-Branch: `main`
-Last good commit: `d4b851caa27ed99e0eea8138c7b7f06786b50d5a` (cumulative-audit CI run 29700754803)
-Working tree: clean after merge
+Active checkpoint: 8 — Finite sweep, aggregate analysis, plots, and mock-pipeline release gate
+Last completed checkpoint: 8 — Finite sweep, aggregate analysis, plots, and mock-pipeline release gate
+Branch: `checkpoint-08-mock-pipeline`
+Last good commit: `58c174ab259d19c1295faac831cc17761d9193fa` (CI run 29709417138)
+Working tree: clean after commit
 
 ## Release target
 
@@ -15,43 +15,43 @@ Working tree: clean after merge
 - Benchmark contract: 0.1 frozen
 - Result contract: 0.1 frozen
 - Metrics contract: 0.1 frozen
-- `mock_pipeline_ready`: false
+- `mock_pipeline_ready`: true
 - `sequence_research_verified`: false
 - `release_candidate_ready`: false
 
 ## Environment last verified
 
 - Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
-- Install command: `python -m pip install -e ".[dev]"`
-- SeQUeNCe revision/environment: N/A
+- Install command: `python -m pip install -e ".[dev,plot]"`
+- Real-simulator research environment: N/A
 
 ## Last passing commands
 
-GitHub Actions cumulative-audit CI run 29700754803:
+GitHub Actions CI run 29709417138:
 
-- editable development installation — passed
+- editable development and plotting installation — passed
 - `python -m ruff check .` — passed
 - `python -m ruff format --check .` — passed
-- contract, specification, result, artifact, adapter, metric, runner, CLI, and catalog tests — passed
-- installed CLI listing and all four frozen mock benchmark run/validate/summarize sequences — passed
+- all focused suites from contracts through catalog — passed
+- sweep and analysis tests — passed
+- full mock-pipeline gate test — passed
+- installed CLI smoke for all four frozen benchmarks, the nine-run sweep, and both approved plots — passed
 - full repository test suite — passed
 - `git diff --check` — passed
 
 ## What works now
 
-- Frozen v0.1 benchmark, result, and metric contracts.
-- Strict benchmark loading, canonicalization, and benchmark hashing.
-- Canonical complete and failed result bundles with validated atomic I/O.
-- Deterministic synthetic mock adapter with structured support reports.
-- Eight backend-independent standard metrics.
-- Adapter-neutral single-run orchestration and exact provenance.
-- CLI commands `list`, `validate`, `run`, `summarize`, and `validate-result`.
-- Exactly four frozen catalog benchmarks, all validated and executed through mock.
-- The complete repository through Checkpoint 7 has been independently revalidated.
+- All independently audited capabilities through Checkpoint 7.
+- Strict SweepSpec v0.1 loading with approved scalar replacements and explicit seeds.
+- Deterministic bounded cartesian expansion with a hard 100-run preflight cap.
+- Sequential sweep execution through the existing adapter-neutral single-run pipeline.
+- Validated child bundles, a sweep manifest, deterministic aggregate CSV, and exactly two approved plots.
+- The checked-in sweep expands to nine unique execution hashes and completes end to end.
+- The complete simulator-independent mock pipeline is ready for real-backend research.
 
 ## What is intentionally not implemented
 
-- Sweeps, aggregation, plots, and SeQUeNCe research or integration.
+- Parallelism, resume, retries, conditional axes, random search, databases, dashboards, or real-simulator research/integration.
 
 ## Open blockers
 
@@ -59,26 +59,19 @@ GitHub Actions cumulative-audit CI run 29700754803:
 
 ## Frozen assumptions in force
 
-- Files under `schemas/v0_1/` and `docs/contracts/` are unchanged since the final Checkpoint 1 audit.
-- The four benchmark files, identifiers, values, request counts, topology choices, and hashes are frozen.
-- All benchmark extensions are empty; backend, seed, output, and sweep concerns remain external.
-- Grid routing uses the lexicographically smallest equal-length shortest path.
-- Mock values are synthetic and are not a physics baseline.
-- `mock_pipeline_ready` remains false until Checkpoint 8 is completed.
+- Files under `schemas/v0_1/` and `docs/contracts/` remain unchanged.
+- The four frozen benchmark files and hashes remain unchanged.
+- Sweep axes replace only approved scalar benchmark paths.
+- Sweep expansion is capped at 100 runs before execution; the checked-in sweep has nine.
+- Mock outputs and aggregate trends are synthetic and are not physical claims.
 
 ## Latest checkpoint evidence
 
-- Checkpoint report: `docs/ai_handoff/checkpoint_07_report.md`
-- Cumulative audit: `docs/ai_handoff/checkpoint_07_cumulative_audit.md`
-- Cumulative-audit CI run: 29700754803
-- Catalog: `benchmarks/v0_1/`
-- Hash registry: `benchmarks/v0_1/README.md`
+- Report: `docs/ai_handoff/checkpoint_08_report.md`
+- Gate document: `docs/mock_pipeline_gate.md`
+- CI run: 29709417138
+- Checked-in sweep: `sweeps/v0_1/link_loss_small.yaml`
 
 ## Next allowed action
 
-Execute Checkpoint 8 only: finite sweep, aggregate analysis, plots, and the mock-pipeline release gate.
-
-## Notes for the next agent
-
-- Do not begin SeQUeNCe research before the Checkpoint 8 mock-pipeline gate is complete.
-- Keep historical failed intermediate CI attempts distinct from the accepted green checkpoint heads.
+Merge and independently re-audit Checkpoint 8, then execute Checkpoint 8.5 only: simulator portfolio and paper-strategy freeze. Do not create production real-simulator adapters during Checkpoint 8.5.

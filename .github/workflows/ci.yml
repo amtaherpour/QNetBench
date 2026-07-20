@@ -23,8 +23,8 @@ jobs:
       - name: Upgrade packaging tools
         run: python -m pip install --upgrade pip
 
-      - name: Install development dependencies
-        run: python -m pip install -e ".[dev]"
+      - name: Install development and plotting dependencies
+        run: python -m pip install -e ".[dev,plot]"
 
       - name: Ruff lint
         run: python -m ruff check .
@@ -53,7 +53,13 @@ jobs:
       - name: Catalog tests
         run: python -m pytest -q tests/catalog tests/cli/test_list.py
 
-      - name: Frozen catalog CLI smoke
+      - name: Sweep and analysis tests
+        run: python -m pytest -q tests/sweeps tests/analysis tests/cli/test_sweep.py
+
+      - name: Full mock-pipeline gate test
+        run: python -m pytest -q tests/integration/test_full_mock_pipeline.py
+
+      - name: Installed CLI mock-pipeline smoke
         run: |
           qnetbench list
           tmp_dir="$(mktemp -d)"
@@ -69,6 +75,14 @@ jobs:
             qnetbench validate-result "$tmp_dir/$name"
             qnetbench summarize "$tmp_dir/$name" > /dev/null
           done
+          qnetbench sweep sweeps/v0_1/link_loss_small.yaml --backend mock --out "$tmp_dir/sweep"
+          qnetbench plot "$tmp_dir/sweep"
+          test -f "$tmp_dir/sweep/sweep_manifest.json"
+          test -f "$tmp_dir/sweep/aggregate_metrics.csv"
+          test -f "$tmp_dir/sweep/plots/request_success_probability.png"
+          test -f "$tmp_dir/sweep/plots/latency_mean_s.png"
+          cat "$tmp_dir/sweep/sweep_manifest.json"
+          cat "$tmp_dir/sweep/aggregate_metrics.csv"
 
       - name: Full test suite
         run: python -m pytest -q

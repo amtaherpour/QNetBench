@@ -5,7 +5,9 @@ simulators. It is **not** a simulator.
 
 ## Current status
 
-Checkpoints 0–7 are implemented and verified. The repository provides:
+Checkpoint 8 is implementing the finite sweep, deterministic aggregate analysis,
+approved plots, and the simulator-independent mock-pipeline release gate. The
+repository already provides:
 
 - frozen v0.1 benchmark, result, and metric contracts;
 - strict benchmark loading, canonicalization, and SHA-256 hashing;
@@ -13,27 +15,31 @@ Checkpoints 0–7 are implemented and verified. The repository provides:
 - a deterministic synthetic mock adapter;
 - the eight backend-independent standard metrics;
 - adapter-neutral single-run orchestration;
-- a five-command CLI; and
+- the catalog, validate, run, summarize, and validate-result CLI commands; and
 - exactly four frozen v0.1 catalog benchmarks.
 
 The mock backend is a contract and pipeline oracle. Its values are synthetic and
-must not be interpreted as physical quantum-network results. SeQUeNCe research
-and integration have not started.
+must not be interpreted as physical quantum-network results. Real-simulator
+research and integration have not started.
 
 ## Quick start
 
 ```bash
-python -m pip install -e ".[dev]"
+python -m pip install -e ".[dev,plot]"
 qnetbench list
 qnetbench validate benchmarks/v0_1/link_2_batch.yaml
 qnetbench run benchmarks/v0_1/link_2_batch.yaml --backend mock --seed 7 --out results/link-2-seed-7
 qnetbench validate-result results/link-2-seed-7
 qnetbench summarize results/link-2-seed-7
+qnetbench sweep sweeps/v0_1/link_loss_small.yaml --backend mock --out results/link-loss-small
+qnetbench plot results/link-loss-small
 ```
 
-Existing output is never replaced unless `--overwrite` is supplied explicitly.
-See `docs/quickstart.md`, `docs/reproducibility.md`, `docs/adapter_guide.md`, and
-`docs/support_matrix.md`.
+Existing single-run output is never replaced unless `--overwrite` is supplied
+explicitly. Existing sweep output always fails; alpha has no resume, retry,
+parallel, or overwrite mode. See `docs/quickstart.md`,
+`docs/reproducibility.md`, `docs/adapter_guide.md`, `docs/support_matrix.md`, and
+`docs/mock_pipeline_gate.md`.
 
 ## Frozen catalog
 

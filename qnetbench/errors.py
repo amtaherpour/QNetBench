@@ -10,7 +10,7 @@ class QNetBenchError(Exception):
 
 
 class ConfigError(QNetBenchError):
-    """Raised when a benchmark source cannot be parsed or validated."""
+    """Raised when a benchmark or sweep source cannot be parsed or validated."""
 
     def __init__(self, message: str, *, source: str | Path | None = None) -> None:
         self.source = None if source is None else Path(source)
@@ -51,3 +51,7 @@ class RunError(QNetBenchError):
         if self.output is not None:
             message = f"{message}; failed bundle: {self.output}"
         super().__init__(message)
+
+
+class SweepError(QNetBenchError):
+    """Raised when a finite sweep cannot be safely planned, run, or analyzed."""

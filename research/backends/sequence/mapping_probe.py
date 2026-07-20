@@ -216,9 +216,7 @@ def _records_from_events(
                     failure_reason=None,
                     metadata={
                         "simulator": "sequence",
-                        "classification": (
-                            "native_event_derived_request_assignment"
-                        ),
+                        "classification": ("native_event_derived_request_assignment"),
                         "native_time_ps": event["native_time_ps"],
                         "callback_time_ps": event["callback_time_ps"],
                         "memory_index": event["memory_index"],
@@ -371,9 +369,7 @@ def run_case(
         sort_keys=True,
         separators=(",", ":"),
     )
-    payload["canonical_digest"] = hashlib.sha256(
-        canonical.encode("utf-8")
-    ).hexdigest()
+    payload["canonical_digest"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     return payload
 
 

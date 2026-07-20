@@ -58,9 +58,7 @@ def main() -> None:
             "record_count": len(normal),
             "normal_success_count": normal_successes,
             "controlled_failure_success_count": failure_successes,
-            "normal_digest": hashlib.sha256(
-                canonical.encode("utf-8")
-            ).hexdigest(),
+            "normal_digest": hashlib.sha256(canonical.encode("utf-8")).hexdigest(),
         }
     arguments.output.parent.mkdir(parents=True, exist_ok=True)
     arguments.output.write_text(

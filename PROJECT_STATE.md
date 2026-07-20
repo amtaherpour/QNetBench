@@ -1,12 +1,12 @@
 # QNetBench Project State
 
 Last updated (UTC): 2026-07-20
-Status: IN_PROGRESS
+Status: COMPLETE
 Active checkpoint: 8 — Finite sweep, aggregate analysis, plots, and mock-pipeline release gate
-Last completed checkpoint: 7 — Frozen benchmark catalog and user-facing mock documentation
+Last completed checkpoint: 8 — Finite sweep, aggregate analysis, plots, and mock-pipeline release gate
 Branch: `checkpoint-08-mock-pipeline`
-Last good commit: `8d872c8ba3c8bdae84c52755c160e139260cc5c8`
-Working tree: committed on checkpoint branch
+Last good commit: `58c174ab259d19c1295faac831cc17761d9193fa` (CI run 29709417138)
+Working tree: clean after commit
 
 ## Release target
 
@@ -15,26 +15,39 @@ Working tree: committed on checkpoint branch
 - Benchmark contract: 0.1 frozen
 - Result contract: 0.1 frozen
 - Metrics contract: 0.1 frozen
-- `mock_pipeline_ready`: false
+- `mock_pipeline_ready`: true
 - `sequence_research_verified`: false
 - `release_candidate_ready`: false
 
 ## Environment last verified
 
-- Python: CPython 3.12 required; Checkpoint 8 CI pending
+- Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
 - Install command: `python -m pip install -e ".[dev,plot]"`
 - Real-simulator research environment: N/A
 
 ## Last passing commands
 
-- Checkpoint 7 cumulative-audit CI run 29700754803 passed the complete accumulated gate.
-- Focused Checkpoint 8 development checks are prepared; authoritative Python 3.12 CI is pending.
+GitHub Actions CI run 29709417138:
+
+- editable development and plotting installation — passed
+- `python -m ruff check .` — passed
+- `python -m ruff format --check .` — passed
+- all focused suites from contracts through catalog — passed
+- sweep and analysis tests — passed
+- full mock-pipeline gate test — passed
+- installed CLI smoke for all four frozen benchmarks, the nine-run sweep, and both approved plots — passed
+- full repository test suite — passed
+- `git diff --check` — passed
 
 ## What works now
 
-- All capabilities through the independently audited Checkpoint 7 baseline.
-- Strict SweepSpec loading, bounded deterministic expansion, sequential sweep orchestration, aggregate analysis, and approved plotting are implemented on the checkpoint branch.
-- The checked-in sweep plans nine unique mock executions.
+- All independently audited capabilities through Checkpoint 7.
+- Strict SweepSpec v0.1 loading with approved scalar replacements and explicit seeds.
+- Deterministic bounded cartesian expansion with a hard 100-run preflight cap.
+- Sequential sweep execution through the existing adapter-neutral single-run pipeline.
+- Validated child bundles, a sweep manifest, deterministic aggregate CSV, and exactly two approved plots.
+- The checked-in sweep expands to nine unique execution hashes and completes end to end.
+- The complete simulator-independent mock pipeline is ready for real-backend research.
 
 ## What is intentionally not implemented
 
@@ -42,7 +55,7 @@ Working tree: committed on checkpoint branch
 
 ## Open blockers
 
-- None; Checkpoint 8 Python 3.12 gate pending.
+- None.
 
 ## Frozen assumptions in force
 
@@ -50,14 +63,15 @@ Working tree: committed on checkpoint branch
 - The four frozen benchmark files and hashes remain unchanged.
 - Sweep axes replace only approved scalar benchmark paths.
 - Sweep expansion is capped at 100 runs before execution; the checked-in sweep has nine.
-- `mock_pipeline_ready` stays false until the exact final gate passes.
+- Mock outputs and aggregate trends are synthetic and are not physical claims.
 
 ## Latest checkpoint evidence
 
 - Report: `docs/ai_handoff/checkpoint_08_report.md`
 - Gate document: `docs/mock_pipeline_gate.md`
+- CI run: 29709417138
 - Checked-in sweep: `sweeps/v0_1/link_loss_small.yaml`
 
 ## Next allowed action
 
-Complete Checkpoint 8 verification only. Do not begin real-simulator research until the exact final branch head is green, merged, independently re-audited, and recorded.
+Merge and independently re-audit Checkpoint 8, then execute Checkpoint 8.5 only: simulator portfolio and paper-strategy freeze. Do not create production real-simulator adapters during Checkpoint 8.5.

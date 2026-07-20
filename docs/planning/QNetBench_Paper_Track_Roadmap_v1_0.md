@@ -73,6 +73,6 @@ open reference workflow without private access.
 
 Every checkpoint gets a branch, report, final green head, merge, and independent
 audit. Repo-controlled failures are repaired before advancing. External access
-constraints are isolated to optional lanes while open work continues. Tests are
-never weakened. v0.1 is never silently changed, and new top-level checkpoints
-require explicit approval plus an ADR.
+constraints are isolated to optional lanes while open work continues.
+Tests are never weakened. v0.1 is never silently changed, and new top-level
+checkpoints require explicit approval plus an ADR.

@@ -1,27 +1,24 @@
 # QNetBench
 
-QNetBench is a Python benchmark and reproducibility layer above quantum-network
-simulators. It is **not** a simulator.
+QNetBench is a simulator-neutral benchmark, conformance, and reproducibility layer
+for quantum-network simulators. It is **not** a simulator.
 
 ## Current status
 
-Checkpoint 8 is complete. The simulator-independent mock pipeline now provides:
+Checkpoint 8 is complete and independently audited. The core provides frozen
+v0.1 benchmark/result/metric contracts, strict benchmark and sweep loading,
+canonical bundles, a deterministic synthetic mock oracle, eight standard
+metrics, adapter-neutral single-run and finite-sweep orchestration, deterministic
+aggregation, two approved plots, seven CLI commands, and four frozen benchmarks.
 
-- frozen v0.1 benchmark, result, and metric contracts;
-- strict benchmark and sweep loading, canonicalization, and SHA-256 identities;
-- canonical complete and failed result bundles with atomic I/O;
-- a deterministic synthetic mock adapter;
-- the eight backend-independent standard metrics;
-- adapter-neutral single-run and sequential finite-sweep orchestration;
-- deterministic aggregate CSV output and exactly two approved plots;
-- the `list`, `validate`, `run`, `sweep`, `plot`, `summarize`, and
-  `validate-result` CLI commands; and
-- exactly four frozen v0.1 catalog benchmarks.
+Checkpoint 8.5 is freezing the paper-track simulator portfolio before production
+real adapters are written. The selected open targets are SeQUeNCe and Q2NS;
+QuISP is the qualification reserve/possible third backend, and NetSquid is an
+optional credentialed bring-your-own-installation reference. A passing research
+probe does not yet mean QNetBench supports that backend.
 
-The mock backend is a contract and pipeline oracle. Its values are synthetic and
-must not be interpreted as physical quantum-network results. Production
-real-simulator adapters have not started; their portfolio and mapping will be
-frozen separately before implementation.
+The mock is a contract and pipeline oracle. Its values are synthetic and must
+never be interpreted as physical quantum-network results.
 
 ## Quick start
 
@@ -36,11 +33,17 @@ qnetbench sweep sweeps/v0_1/link_loss_small.yaml --backend mock --out results/li
 qnetbench plot results/link-loss-small
 ```
 
-Existing single-run output is never replaced unless `--overwrite` is supplied
-explicitly. Existing sweep output always fails; alpha has no resume, retry,
-parallel, or overwrite mode. See `docs/quickstart.md`,
-`docs/reproducibility.md`, `docs/adapter_guide.md`, `docs/support_matrix.md`, and
-`docs/mock_pipeline_gate.md`.
+Existing single-run output is replaced only with explicit `--overwrite`. Existing
+sweep output always fails; alpha has no resume, retry, parallel, or sweep-overwrite
+mode.
+
+## Paper track
+
+After Checkpoint 8.5 the finite roadmap is: executable semantic mapping freeze,
+production conforming open adapters, cross-simulator scientific validation and
+reference corpus, then the independently audited paper-ready public release.
+Details are in `docs/planning/QNetBench_Paper_Track_Roadmap_v1_0.md`, with ADRs
+under `docs/decisions/` and evidence under `docs/research/` and `simulators/`.
 
 ## Frozen catalog
 

@@ -1,0 +1,103 @@
+portfolio_schema_version: "1.0"
+decision_id: qnetbench-simulator-portfolio-2026-07
+decision_status: frozen
+decision_date_utc: "2026-07-20"
+frozen_at_checkpoint: "8.5"
+benchmark_contract_version: "0.1"
+result_contract_version: "0.1"
+metric_contract_version: "0.1"
+strategy:
+  paper_claim: >-
+    One simulator-neutral benchmark and conformance system produces validated,
+    semantically documented artifacts across independently designed quantum-network
+    simulators.
+  minimum_open_real_backends: 2
+  numeric_equality_required: false
+  semantic_equivalence_required: true
+core_oracle:
+  simulator_id: mock
+  role: deterministic_contract_and_pipeline_oracle
+  physical_claims_allowed: false
+  public_ci: true
+mandatory_open_targets:
+  - simulator_id: sequence
+    display_name: SeQUeNCe
+    selected_version: "1.0.0"
+    selected_source_commit: ffd7c837f932c7bdc9450cd211aaf75b4d6a99a5
+    framework: Python discrete-event simulator
+    language: Python
+    license: BSD-3-Clause
+    public_ci: true
+    architecture_family: native_python_quantum_network_des
+    required_cases:
+      - qnb-v0-1-link-2-batch
+      - qnb-v0-1-chain-3-batch
+    verification_status: public_install_and_api_probe_passed_mapping_pending_checkpoint_9
+    probe_run_id: 29710405052
+    source: https://github.com/sequence-toolbox/SeQUeNCe
+    documentation: https://sequence-rtd-tutorial.readthedocs.io/
+  - simulator_id: q2ns
+    display_name: Q2NS
+    selected_version: main_at_f22ba28f437099ba3cf9956ca332ba5ce8bb14fd
+    selected_source_commit: f22ba28f437099ba3cf9956ca332ba5ce8bb14fd
+    ns3_version: "3.47"
+    ns3_source_commit: e2c9e30c6ebdfd534aa7e30f6324b5674d138b9f
+    framework: ns-3 contributed quantum-network module
+    language: C++
+    license: GPL-2.0-only
+    public_ci: true
+    architecture_family: ns3_classical_quantum_cosimulation
+    required_cases:
+      - qnb-v0-1-link-2-batch
+      - qnb-v0-1-chain-3-batch
+    verification_status: public_build_and_official_example_passed_mapping_pending_checkpoint_9
+    probe_run_id: 29710405058
+    source: https://github.com/QuantumInternet-it/q2ns
+    documentation: https://quantuminternet-it.github.io/q2ns/
+qualification_reserve:
+  - simulator_id: quisp
+    display_name: QuISP
+    selected_version: master_at_2530200c5aa8f43a6f1471c16b8abb98c4b7ee2c
+    selected_source_commit: 2530200c5aa8f43a6f1471c16b8abb98c4b7ee2c
+    framework: OMNeT++ quantum repeater-network simulation
+    language: C++ and OMNeT++ NED
+    license: BSD-3-Clause; OMNeT++ Academic Public License dependency
+    public_ci: source_probe_only
+    architecture_family: omnetpp_repeater_network_des
+    promotion_rule: >-
+      Promote to a production paper backend only after Checkpoint 9 proves
+      headless execution, link/chain request completion, seed control,
+      fidelity/timing extraction, and automated result collection.
+    verification_status: public_source_probe_passed_runtime_qualification_pending_checkpoint_9
+    probe_run_id: 29710405064
+    source: https://github.com/sfc-aqua/quisp
+optional_credentialed:
+  - simulator_id: netsquid
+    display_name: NetSquid
+    selected_version: user_installed_current_compatible_release
+    framework: Python/Cython discrete-event simulator
+    language: Python and Cython
+    access: registration_and_private_package_index
+    public_ci: false
+    architecture_family: python_cython_physical_component_des
+    role: high_value_optional_reference_backend
+    promotion_rule: >-
+      Maintain as a bring-your-own-installation plugin and optional private CI
+      lane when credentials and terms permit; never make it a dependency of the
+      openly reproducible core.
+    verification_status: public_access_model_verified_package_probe_requires_authorized_user_credentials
+    probe_run_id: 29710405060
+    source: https://netsquid.org/
+deferred_profiles:
+  - simulator_id: qunetsim
+    reason: high-level protocol framework does not match the frozen physical-performance request semantics
+  - simulator_id: simulaqron
+    reason: application and NetQASM semantics are not the initial physical-performance paper profile
+  - simulator_id: qkdnetsim
+    reason: QKD key-management and classical-network focus requires a separate future profile
+  - simulator_id: qunet
+    reason: cost-vector and routing abstraction is not a discrete-event canonical request-result match
+fallback_policy:
+  q2ns_failure: qualify_and_promote_quisp_without_changing_v0_1_contracts
+  sequence_failure: repair_or_pin_sequence_before_considering_replacement
+  netsquid_unavailable: continue_open_paper_core_without_blocking

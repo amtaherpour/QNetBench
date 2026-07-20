@@ -1,0 +1,53 @@
+conformance_schema_version: "1.0"
+name: QNetBench real-adapter conformance profile
+applies_to_contract_version: "0.1"
+levels:
+  interface:
+    required:
+      - stable backend identity and version
+      - structured support report before execution
+      - no metric calculation inside the adapter
+      - no final bundle writing inside the adapter
+      - canonical RequestResult records only
+      - explicit unsupported-field paths
+  reproducibility:
+    required:
+      - pinned simulator revision or release
+      - documented license and installation recipe
+      - deterministic seed mapping or explicit nondeterminism declaration
+      - clean isolated probe environment
+      - repeat-run evidence and raw probe artifacts
+  semantic_mapping:
+    required:
+      - field-by-field BenchmarkSpec mapping table
+      - native, derived, unavailable, or unsupported classification for outputs
+      - timing units and measurement-window definition
+      - fidelity definition and extraction point
+      - attempts definition or unavailable result
+      - request terminal-status mapping
+  paper_backend:
+    required:
+      - link-2 and chain-3 conformance scenarios
+      - validated complete and controlled-failure bundles
+      - metric recomputation from canonical records
+      - cross-seed reproducibility evidence
+      - no silent simulator defaults
+      - documented semantic limitations
+comparison_policy:
+  require_numeric_equality_across_simulators: false
+  require_identical_benchmark_identity: true
+  require_common_metric_definitions: true
+  require_semantic_mapping_evidence: true
+  permit_unavailable_metrics_when_declared: true
+  prohibit_mock_as_physical_reference: true
+versioning_policy:
+  preserve_v0_1: true
+  breaking_changes_require:
+    - executable evidence from Checkpoint 9
+    - architecture decision record
+    - new contract version
+    - migration and compatibility tests
+  candidate_v0_2_additions:
+    - semantic provenance sidecar for native, derived, unavailable, or unsupported values
+    - machine-readable capability/support grade
+    - raw-event provenance digest and extraction recipe

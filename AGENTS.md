@@ -2,73 +2,105 @@
 
 ## Mission
 
-QNetBench is a benchmark and reproducibility layer above quantum-network simulators. It is not a simulator.
+QNetBench is a simulator-neutral benchmark, conformance, and reproducibility
+layer for quantum-network simulators. It is not a simulator. The paper-track goal
+is an openly reproducible multi-simulator standard whose claims are traceable to
+validated canonical artifacts.
 
 ## Read before editing
 
 1. `PROJECT_STATE.md`
-2. Versioned contracts under `docs/contracts/` and `schemas/` when they exist
+2. Versioned contracts under `docs/contracts/` and `schemas/`
 3. `docs/planning/QNetBench_Improved_AI_Handoff_Manual_v0_2.md`
 4. `docs/planning/QNetBench_Codex_Execution_Control_Plan_v0_1.md`
-5. The latest `docs/ai_handoff/checkpoint_*_report.md`
-6. Open blocker reports and relevant ADRs when they exist
+5. `docs/planning/QNetBench_Paper_Track_Roadmap_v1_0.md`
+6. Relevant files under `docs/decisions/`, `docs/research/`, and `simulators/`
+7. The latest checkpoint and independent-audit reports
+
+The original control plan is historical authority for completed Checkpoints 0–8.
+The paper-track roadmap is authoritative from Checkpoint 8.5 onward.
 
 ## Work control
 
-- Work on exactly one active checkpoint.
-- Preserve unrelated human changes.
-- Run every command required by the active checkpoint.
-- Update `PROJECT_STATE.md` and write a checkpoint or blocker report.
-- Stop after reporting. Do not start the next checkpoint without a new instruction.
+- Work on exactly one active checkpoint and preserve unrelated human changes.
+- Repair every repository-controlled failure before advancing.
+- Run every command and external probe required by the active checkpoint.
+- Update `PROJECT_STATE.md` and the checkpoint/audit report with exact evidence.
+- Do not weaken, delete, skip, or rewrite a test merely to advance.
+- Do not claim a command, installation, API, artifact, or simulator behavior was
+  verified unless the recorded environment actually verified it.
+
+## Frozen baseline
+
+Checkpoints 0–8 are complete and independently audited. Without a separately
+versioned ADR and migration plan, do not change:
+
+- BenchmarkSpec, canonical-result, or metric contracts v0.1;
+- files under `schemas/v0_1/` or `docs/contracts/`;
+- the four frozen benchmark files, IDs, scientific values, or hashes;
+- standard metric semantics or canonical bundle invariants;
+- the adapter-neutral runner boundary; or
+- the deterministic mock algorithm and its non-physical interpretation.
 
 ## Architectural invariants
 
-- `BenchmarkSpec` is backend-independent. Backend, seed, output, and sweeps are execution concerns.
+- Backend, seed, output, and sweep settings are execution concerns, not benchmark
+  fields.
 - Canonical request records and the run manifest are the only metric inputs.
-- Metrics must never import adapters or read raw backend output.
-- Simulator-specific imports and API calls stay in `qnetbench/adapters/<name>.py` or an approved research tool.
-- Adapters report unsupported fields explicitly; there is no silent coercion or fallback.
-- The deterministic mock adapter must complete end to end before SeQUeNCe production work.
-- Do not create `qnetbench/adapters/sequence.py` before Checkpoint 10.
-- Do not change frozen contracts, hashes, benchmark values, or metric semantics without explicit approval and an ADR/version decision.
+- Metrics never import adapters or read simulator/raw output.
+- Simulator APIs stay in `qnetbench/adapters/<name>.py`, an approved bridge, or a
+  checkpoint-controlled research probe.
+- Adapters emit canonical records in memory, never compute metrics, and never
+  write final bundles.
+- Unsupported fields are reported explicitly; there is no silent coercion,
+  fallback, guessed default, or fabricated observable.
+- Mock output is synthetic and can never be cited as physical evidence.
+- Numeric equality across independent real simulators is not required; semantic
+  conformance, pinned provenance, and common metrics are required.
 
-## Alpha scope
+## Paper-track portfolio
 
-- Target release: `0.1.0a1` after Checkpoint 11.
-- Required backends: deterministic mock; SeQUeNCe for link-2 and chain-3 only.
-- Required catalog: link-2, chain-3, chain-5, and grid-3x3.
-- Out of scope: additional simulators, purification, random or adaptive routing, dynamic arrivals, generalized resource metrics, parallel or resumable sweeps, dashboards, paper publication, DOI creation, and additional adapters.
+- Required open targets: SeQUeNCe and Q2NS, subject to Checkpoint 9 executable
+  semantic conformance.
+- Qualification reserve/possible third target: QuISP.
+- Optional credentialed reference: NetSquid as a bring-your-own-installation
+  plugin/private-CI lane; it never blocks the open core.
+- Do not create production real-simulator adapters before Checkpoint 9 freezes
+  exact mappings and conformance fixtures.
+- Default CI must not install any real simulator.
+
+## Current finite roadmap
+
+- Checkpoint 9: verified backend micro-scenarios and semantic mapping freeze.
+- Checkpoint 10: production conforming open adapters.
+- Checkpoint 11: cross-simulator scientific validation and reference corpus.
+- Checkpoint 12: paper-ready public release and independent reproduction audit.
+
+Do not create further top-level checkpoints without explicit human approval and
+an ADR.
 
 ## Standard commands
 
 ```bash
-python -m pip install -e ".[dev]"
+python -m pip install -e ".[dev,plot]"
 python -m ruff check .
 python -m ruff format --check .
 python -m pytest -q
 git diff --check
 ```
 
-Use the active checkpoint section for any additional commands.
+Use checkpoint-specific workflows for isolated real-simulator research.
 
-## Test and evidence rules
+## External constraints
 
-- Never delete or weaken a test to advance a checkpoint.
-- Never claim a command ran unless it ran in the reported environment.
-- Never fabricate artifacts or substitute mock output for a real backend.
-- Record exact commands, exit codes, hashes, versions, and artifact paths.
-- Default CI must not require SeQUeNCe.
-
-## Blockers
-
-Stop and write `docs/blockers/YYYY-MM-DD-short-title.md` when:
-
-- a required command cannot pass within scope;
-- authoritative instructions conflict;
-- a frozen assumption must change;
-- a simulator API, installation, version, or license cannot be verified; or
-- unrelated changes would be overwritten.
+A repository-controlled problem must be solved. A genuine external constraint
+such as private credentials or a third-party license is documented with exact
+evidence and isolated to its optional lane while all open work continues. Never
+fabricate access, accept terms for the user, store credentials, or represent a
+source-only probe as runtime conformance.
 
 ## Publishing
 
-Do not force-push, tag, publish packages, create a GitHub release, mint a DOI, or make external scientific claims without explicit human authorization.
+Do not force-push, tag, publish packages, create a GitHub release, mint a DOI,
+submit a paper, or make external scientific claims without explicit human
+authorization.

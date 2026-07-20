@@ -1,0 +1,35 @@
+name: SeQUeNCe research probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [checkpoint-08-5-simulator-strategy]
+    paths:
+      - .github/workflows/simulator-research-probes.yml
+      - research/probes/sequence_api_probe.py
+      - simulators/portfolio_v1.yaml
+  pull_request:
+    paths:
+      - .github/workflows/simulator-research-probes.yml
+      - research/probes/sequence_api_probe.py
+      - simulators/portfolio_v1.yaml
+
+permissions:
+  contents: read
+
+jobs:
+  sequence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install sequence==1.0.0
+      - run: mkdir -p research/evidence && python research/probes/sequence_api_probe.py --output research/evidence/sequence_probe.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sequence-probe
+          path: research/evidence/sequence_probe.json

@@ -1,0 +1,9 @@
+{
+  "package_install_attempted": false,
+  "private_package_index_documented": true,
+  "probe_schema_version": "1.0",
+  "public_homepage_reachable": true,
+  "reason": "credentials and terms acceptance are user-specific",
+  "registration_required": true,
+  "simulator_id": "netsquid"
+}

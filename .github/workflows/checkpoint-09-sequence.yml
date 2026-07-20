@@ -29,13 +29,13 @@ jobs:
           cache: pip
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e ".[dev,plot]" sequence==1.0.0
-      - name: Run mapping probe
+      - name: Discover reproducible chain seed
         run: |
           set -o pipefail
           mkdir -p research/evidence/checkpoint_09
-          python research/backends/sequence/mapping_probe.py \
-            --output research/evidence/checkpoint_09/sequence_mapping_probe.json \
-            2>&1 | tee research/evidence/checkpoint_09/sequence_mapping_probe.log
+          python research/backends/sequence/find_chain_seed.py \
+            --output research/evidence/checkpoint_09/sequence_chain_seed.json \
+            2>&1 | tee research/evidence/checkpoint_09/sequence_seed_search.log
       - uses: actions/upload-artifact@v4
         if: always()
         with:

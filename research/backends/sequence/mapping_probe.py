@@ -143,6 +143,20 @@ def _shortest_path(spec: BenchmarkSpec) -> tuple[str, ...]:
     return min(tuple(path) for path in candidates)
 
 
+def _reservation_memory_size(spec: BenchmarkSpec) -> int:
+    path = _shortest_path(spec)
+    memories_per_request_at_bottleneck = 1 if len(path) == 2 else 2
+    capacity = (
+        spec.physical_profile.memory_count_per_node
+        // memories_per_request_at_bottleneck
+    )
+    if capacity < 1:
+        raise RuntimeError(
+            "SeQUeNCe reservation requires more intermediate memories than available"
+        )
+    return min(spec.workload.request_count, capacity)
+
+
 def _patch_config(
     config: dict[str, Any],
     *,
@@ -325,10 +339,7 @@ def run_case(
             responder=destination_name,
             start_t=native_start_ps,
             end_t=native_end_ps,
-            memo_size=min(
-                profile.memory_count_per_node,
-                spec.workload.request_count,
-            ),
+            memo_size=_reservation_memory_size(spec),
             fidelity=TARGET_FIDELITY,
         )
         timeline.run()
@@ -346,6 +357,7 @@ def run_case(
         "native_time_unit": "picosecond",
         "canonical_time_offset_s": CONTROL_LEAD_S,
         "simulator_control_target_fidelity": TARGET_FIDELITY,
+        "reservation_memory_size": _reservation_memory_size(spec),
         "reservation_events": source_app.reservation_events,
         "native_success_event_count": len(source_app.events),
         "records": [record.model_dump(mode="json") for record in records],

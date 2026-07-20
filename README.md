@@ -5,22 +5,23 @@ simulators. It is **not** a simulator.
 
 ## Current status
 
-Checkpoint 8 is implementing the finite sweep, deterministic aggregate analysis,
-approved plots, and the simulator-independent mock-pipeline release gate. The
-repository already provides:
+Checkpoint 8 is complete. The simulator-independent mock pipeline now provides:
 
 - frozen v0.1 benchmark, result, and metric contracts;
-- strict benchmark loading, canonicalization, and SHA-256 hashing;
+- strict benchmark and sweep loading, canonicalization, and SHA-256 identities;
 - canonical complete and failed result bundles with atomic I/O;
 - a deterministic synthetic mock adapter;
 - the eight backend-independent standard metrics;
-- adapter-neutral single-run orchestration;
-- the catalog, validate, run, summarize, and validate-result CLI commands; and
+- adapter-neutral single-run and sequential finite-sweep orchestration;
+- deterministic aggregate CSV output and exactly two approved plots;
+- the `list`, `validate`, `run`, `sweep`, `plot`, `summarize`, and
+  `validate-result` CLI commands; and
 - exactly four frozen v0.1 catalog benchmarks.
 
 The mock backend is a contract and pipeline oracle. Its values are synthetic and
-must not be interpreted as physical quantum-network results. Real-simulator
-research and integration have not started.
+must not be interpreted as physical quantum-network results. Production
+real-simulator adapters have not started; their portfolio and mapping will be
+frozen separately before implementation.
 
 ## Quick start
 

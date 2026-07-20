@@ -1,0 +1,58 @@
+mapping_schema_version: "1.0"
+contract_version: "0.1"
+simulator_id: sequence
+simulator_version: "1.0.0"
+source_commit: ffd7c837f932c7bdc9450cd211aaf75b4d6a99a5
+status: executable_probe_pending
+required_cases:
+  - qnb-v0-1-link-2-batch
+  - qnb-v0-1-chain-3-batch
+execution_model:
+  topology: RouterNetTopo with meet-in-the-middle quantum links
+  request_model: one reservation window; successful native entanglement events are assigned to planned request IDs in event order
+  simulator_control_target_fidelity: 0.5
+  control_lead_s: 0.01
+  control_lead_semantics: simulator negotiation offset subtracted from all canonical timestamps
+  formalism: bell_diagonal
+seed_mapping:
+  timeline: explicit benchmark execution seed
+  node_seed_formula: seed * 10000 + stable topology-node index
+input_mappings:
+  network.nodes: {classification: native, target: QuantumRouter nodes}
+  network.links.endpoints: {classification: native, target: meet-in-the-middle quantum connections}
+  network.links.length_km: {classification: native_converted, target: two half quantum-channel distances, formula: km * 1000 / 2}
+  physical_profile.memory_count_per_node: {classification: native, target: QuantumRouter memo_size and reservation memory_size cap}
+  physical_profile.memory_coherence_time_s: {classification: native, target: MemoryArray coherence_time, conversion: none}
+  physical_profile.memory_frequency_hz: {classification: native, target: MemoryArray and quantum-channel frequency, conversion: none}
+  physical_profile.memory_efficiency: {classification: native, target: MemoryArray efficiency, conversion: none}
+  physical_profile.detector_efficiency: {classification: native, target: SingleHeraldedBSM detector efficiency, conversion: none}
+  physical_profile.fiber_attenuation_db_per_km: {classification: native_converted, target: QuantumChannel attenuation, formula: value / 1000 gives dB per meter}
+  physical_profile.quantum_propagation_speed_km_per_s: {classification: native_converted, target: QuantumChannel light_speed, formula: value * 1e-9 gives meters per picosecond}
+  physical_profile.classical_propagation_speed_km_per_s: {classification: derived_delay, target: ClassicalChannel delay, formula: shortest-path distance_km / speed_km_per_s * 1e12}
+  physical_profile.link_fidelity: {classification: native, target: MemoryArray raw_fidelity, conversion: none}
+  physical_profile.swap_success_probability: {classification: native, target: reservation protocol swapping success rate, conversion: none}
+  physical_profile.swap_fidelity_factor: {classification: native, target: reservation protocol swapping degradation, conversion: none}
+  workload.request_count: {classification: derived_event_population, target: maximum recorded native success events plus deadline timeouts}
+  workload.batch_start_s: {classification: native_converted_with_offset, target: reservation start time, formula: (control_lead_s + value) * 1e12}
+  workload.deadline_s: {classification: native_converted_with_offset, target: reservation end time, formula: (control_lead_s + value) * 1e12}
+  protocol.routing: {classification: native_for_required_cases, target: static shortest-path routing; required cases have unique paths}
+  protocol.swapping: {classification: native, target: SeQUeNCe reservation swapping protocol}
+  protocol.purification: {classification: controlled_none, target: fixed low target fidelity prevents purification from being required}
+output_mappings:
+  request_id: {classification: derived, source: stable planned order matched to native successful entanglement event order}
+  submitted_at_s: {classification: benchmark_native, source: workload.batch_start_s}
+  terminal_at_s: {classification: native_converted, source: MemoryInfo.entangle_time, formula: native_ps / 1e12 - control_lead_s}
+  status: {classification: derived, source: successful native event, reservation rejection, or deadline expiration}
+  latency_s: {classification: derived, formula: terminal_at_s - submitted_at_s}
+  fidelity: {classification: native, source: MemoryInfo.fidelity}
+  attempts: {classification: unavailable, reason: RequestApp exposes no stable per-canonical-request generation-attempt counter}
+  path: {classification: native_remapped, source: Reservation.path mapped back to benchmark node IDs}
+  failure_reason: {classification: derived, source: reservation result or deadline expiration}
+  raw_provenance: {classification: native, source: event time, callback time, memory index, reservation path}
+measurement_window:
+  start_s: workload.batch_start_s
+  end_s: workload.deadline_s
+limitations:
+  - request assignment is an explicit deterministic event-order mapping because SeQUeNCe reservations produce a stream of entanglement events rather than named QNetBench requests
+  - attempts_per_success is unavailable for SeQUeNCe v0.1 unless a future pinned simulator API exposes an unambiguous counter
+  - production support is limited to the required unique-path link-2 and chain-3 cases until additional mappings are separately verified

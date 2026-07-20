@@ -1,0 +1,24 @@
+name: Optional NetSquid private conformance
+
+on: workflow_dispatch
+
+jobs:
+  netsquid:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "<verified-compatible-version>"
+      - name: Install authorized optional environment
+        env:
+          NETSQUID_USER: ${{ secrets.NETSQUID_USER }}
+          NETSQUID_PASSWORD: ${{ secrets.NETSQUID_PASSWORD }}
+        run: |
+          test -n "$NETSQUID_USER"
+          test -n "$NETSQUID_PASSWORD"
+          python -m pip install --extra-index-url \
+            "https://${NETSQUID_USER}:${NETSQUID_PASSWORD}@pypi.netsquid.org" \
+            "netsquid==<verified-version>"
+          python -m pip install -e ./optional/qnetbench-netsquid
+      - run: python -m pytest -q optional/qnetbench-netsquid/tests/conformance

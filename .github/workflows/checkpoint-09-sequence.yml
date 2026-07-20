@@ -14,6 +14,10 @@ on:
       - research/backends/sequence/**
       - simulators/mappings/v0_1/sequence.yaml
 
+concurrency:
+  group: checkpoint-09-sequence-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 

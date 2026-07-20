@@ -39,13 +39,15 @@ jobs:
           python -m pip install -e ".[dev,plot]"
       - name: Build and run exact Q2NS mapping probe
         run: |
+          set -o pipefail
           mkdir -p research/evidence/checkpoint_09
           bash research/backends/q2ns/run_probe.sh \
             "$RUNNER_TEMP/q2ns-mapping" \
-            research/evidence/checkpoint_09
+            research/evidence/checkpoint_09 \
+            2>&1 | tee research/evidence/checkpoint_09/q2ns_mapping_probe.log
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: checkpoint-09-q2ns-mapping
-          path: |
-            research/evidence/checkpoint_09/q2ns_raw.json
-            research/evidence/checkpoint_09/q2ns_mapping_probe.json
+          path: research/evidence/checkpoint_09/
+          if-no-files-found: error

@@ -60,17 +60,7 @@ jobs:
         run: python -m pytest -q tests/integration/test_full_mock_pipeline.py
 
       - name: Simulator strategy tests
-        run: |
-          set -o pipefail
-          python -m pytest -vv tests/strategy 2>&1 | tee strategy-tests.log
-
-      - name: Upload strategy-test diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: strategy-test-diagnostics
-          path: strategy-tests.log
-          if-no-files-found: error
+        run: python -m pytest -q tests/strategy
 
       - name: Installed CLI mock-pipeline smoke
         run: |

@@ -1,0 +1,53 @@
+name: Checkpoint 9 Q2NS mapping probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [checkpoint-09-semantic-mapping]
+    paths:
+      - .github/workflows/checkpoint-09-q2ns.yml
+      - research/backends/q2ns/**
+      - simulators/mappings/v0_1/q2ns.yaml
+  pull_request:
+    paths:
+      - .github/workflows/checkpoint-09-q2ns.yml
+      - research/backends/q2ns/**
+      - simulators/mappings/v0_1/q2ns.yaml
+
+concurrency:
+  group: checkpoint-09-q2ns-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  mapping-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install build and validation dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build git python3
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,plot]"
+      - name: Build and run exact Q2NS mapping probe
+        run: |
+          set -o pipefail
+          mkdir -p research/evidence/checkpoint_09
+          bash research/backends/q2ns/run_probe.sh \
+            "$RUNNER_TEMP/q2ns-mapping" \
+            research/evidence/checkpoint_09 \
+            2>&1 | tee research/evidence/checkpoint_09/q2ns_mapping_probe.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: checkpoint-09-q2ns-mapping
+          path: research/evidence/checkpoint_09/
+          if-no-files-found: error

@@ -1,0 +1,48 @@
+name: Checkpoint 9 SeQUeNCe mapping probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [checkpoint-09-semantic-mapping]
+    paths:
+      - .github/workflows/checkpoint-09-sequence.yml
+      - research/backends/sequence/**
+      - simulators/mappings/v0_1/sequence.yaml
+  pull_request:
+    paths:
+      - .github/workflows/checkpoint-09-sequence.yml
+      - research/backends/sequence/**
+      - simulators/mappings/v0_1/sequence.yaml
+
+concurrency:
+  group: checkpoint-09-sequence-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  mapping-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e ".[dev,plot]" sequence==1.0.0
+      - name: Run mapping probe
+        run: |
+          set -o pipefail
+          mkdir -p research/evidence/checkpoint_09
+          python research/backends/sequence/mapping_probe.py \
+            --output research/evidence/checkpoint_09/sequence_mapping_probe.json \
+            2>&1 | tee research/evidence/checkpoint_09/sequence_mapping_probe.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: checkpoint-09-sequence-mapping
+          path: research/evidence/checkpoint_09/
+          if-no-files-found: error

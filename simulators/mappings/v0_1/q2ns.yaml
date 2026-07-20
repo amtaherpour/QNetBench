@@ -1,0 +1,58 @@
+mapping_schema_version: "1.0"
+contract_version: "0.1"
+simulator_id: q2ns
+simulator_version: main_at_f22ba28f437099ba3cf9956ca332ba5ce8bb14fd
+ns3_version: "3.47"
+ns3_commit: e2c9e30c6ebdfd534aa7e30f6324b5674d138b9f
+status: executable_probe_pending
+required_cases:
+  - qnb-v0-1-link-2-batch
+  - qnb-v0-1-chain-3-batch
+execution_model:
+  topology: QNode graph with ns-3 classical links and Q2NS quantum links
+  link_case: native Bell-pair creation, quantum send, state retrieval, and Fidelity analysis
+  chain_case: EntanglementSwapHelper sessions with native BSM, classical correction, and VerifyFidelity trace
+  production_bridge_requirement: QNetBench-owned ns-3 application applies benchmark probability/noise controls explicitly; no simulator default is accepted silently
+seed_mapping:
+  global_seed: RngSeedManager::SetSeed(seed)
+  run_number: RngSeedManager::SetRun(1)
+  stochastic_streams: stable stream assignment per request ID and physical gate in production bridge
+input_mappings:
+  network.nodes: {classification: native, target: QNode instances}
+  network.links.endpoints: {classification: native, target: quantum and classical links}
+  network.links.length_km: {classification: native_control, target: link distance and delay formulas}
+  physical_profile.memory_count_per_node: {classification: bridge_control, target: maximum concurrent request sessions}
+  physical_profile.memory_coherence_time_s: {classification: bridge_noise_model, formula: per-stored-qubit depolarizing probability 1 - exp(-storage_time_s / coherence_time_s)}
+  physical_profile.memory_frequency_hz: {classification: bridge_scheduler, formula: generation-attempt spacing is 1 / value seconds}
+  physical_profile.memory_efficiency: {classification: bridge_stochastic_gate, target: independent memory-readiness Bernoulli event per endpoint and attempt}
+  physical_profile.detector_efficiency: {classification: bridge_stochastic_gate, target: Bernoulli detector acceptance for each required heralding or Bell-measurement event}
+  physical_profile.fiber_attenuation_db_per_km: {classification: bridge_stochastic_gate, formula: channel survival probability 10 ** (-attenuation * length_km / 10)}
+  physical_profile.quantum_propagation_speed_km_per_s: {classification: native_converted, target: QuantumChannel Delay, formula: length_km / speed_km_per_s seconds}
+  physical_profile.classical_propagation_speed_km_per_s: {classification: native_converted, target: ns-3 classical-link delay, formula: length_km / speed_km_per_s seconds}
+  physical_profile.link_fidelity: {classification: bridge_qmap, target: DepolarizingQMap on one half of each Bell pair, formula: Probability = 1 - link_fidelity}
+  physical_profile.swap_success_probability: {classification: bridge_stochastic_gate, target: Bernoulli admission before native Bell-state measurement}
+  physical_profile.swap_fidelity_factor: {classification: bridge_qmap, target: post-swap endpoint depolarizing map, formula: Probability = 1 - swap_fidelity_factor}
+  workload.request_count: {classification: native_bridge_sessions, target: one stable session/request ID per planned request}
+  workload.batch_start_s: {classification: native, target: ns-3 session/scheduler start time}
+  workload.deadline_s: {classification: native, target: Simulator stop/deadline and canonical timeout boundary}
+  protocol.routing: {classification: native_for_required_cases, target: explicit unique path; no alternate route exists}
+  protocol.swapping: {classification: native, target: EntanglementSwapHelper and SwapApp}
+  protocol.purification: {classification: unsupported_but_satisfied, reason: frozen required cases specify none and bridge installs no purification stage}
+output_mappings:
+  request_id: {classification: native_bridge, source: SwapSessionSpec.sessionId or qubit label}
+  submitted_at_s: {classification: benchmark_native, source: workload.batch_start_s}
+  terminal_at_s: {classification: native, source: Simulator::Now at receive or VerifyFidelity trace}
+  status: {classification: derived, source: native completion before deadline or timeout}
+  latency_s: {classification: derived, formula: terminal_at_s - submitted_at_s}
+  fidelity: {classification: native_analysis, source: q2ns::analysis::Fidelity against an ideal Bell-pair reference}
+  attempts: {classification: bridge_native_counter, source: production bridge increments each scheduled generation attempt}
+  path: {classification: planned_native, source: explicit unique QNode/SwapSessionSpec path}
+  failure_reason: {classification: derived, source: stochastic gate, send failure, trace absence, or deadline}
+  raw_provenance: {classification: native, source: ns-3 time, session ID, trace source, seed/run, Q2NS and ns-3 commits}
+measurement_window:
+  start_s: workload.batch_start_s
+  end_s: workload.deadline_s
+limitations:
+  - Q2NS does not provide the complete frozen optical-memory workload as a single built-in application; the production adapter requires an explicit QNetBench-owned ns-3 bridge using the frozen formulas above
+  - the research micro-scenarios verify native state, timing, Bell distribution, swapping, correction, and fidelity extraction; Checkpoint 10 implements the full stochastic bridge
+  - numerical equality with SeQUeNCe is not expected because native physical models and bridge abstractions differ explicitly

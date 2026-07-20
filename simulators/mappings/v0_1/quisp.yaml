@@ -1,0 +1,19 @@
+mapping_schema_version: "1.0"
+contract_version: "0.1"
+simulator_id: quisp
+simulator_version: master_at_2530200c5aa8f43a6f1471c16b8abb98c4b7ee2c
+status: headless_qualification_pending
+portfolio_role: qualification_reserve
+required_decision:
+  promote_only_if:
+    - exact headless build succeeds in the upstream CI container
+    - NoErrorMIM simulation test succeeds and exposes machine-readable fidelity
+    - a multi-hop swapping run exposes terminal timing and fidelity suitable for canonical extraction
+  otherwise: retain as documented reserve and do not create a production adapter
+known_native_capabilities:
+  - OMNeT++ discrete-event timing and reproducible seeds
+  - configurable link length, channel errors, memory counts/lifetimes, gate errors, purification, and swapping
+  - simulation-test result parser with fidelity and Pauli error fields
+known_risk:
+  - upstream states that data collection for the relatively new entanglement-swapping feature is not fully implemented
+  - OMNeT++ is free for academic use but has different commercial licensing requirements

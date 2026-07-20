@@ -1,0 +1,32 @@
+conformance_cases_schema_version: "1.0"
+contract_version: "0.1"
+cases:
+  - case_id: link-2-normal
+    benchmark_id: qnb-v0-1-link-2-batch
+    seed: 7
+    expected:
+      terminal_record_count: 16
+      minimum_success_count: 1
+      canonical_path: [node-0, node-1]
+  - case_id: link-2-controlled-failure
+    benchmark_id: qnb-v0-1-link-2-batch
+    seed: 7
+    expected:
+      terminal_record_count: 16
+      success_count: 0
+  - case_id: chain-3-normal
+    benchmark_id: qnb-v0-1-chain-3-batch
+    seed: 7
+    expected:
+      terminal_record_count: 16
+      minimum_success_count: 1
+      canonical_path: [node-0, node-1, node-2]
+  - case_id: chain-3-controlled-failure
+    benchmark_id: qnb-v0-1-chain-3-batch
+    seed: 7
+    expected:
+      terminal_record_count: 16
+      success_count: 0
+repeatability:
+  same_seed: byte_identical_normalized_evidence
+  alternate_seed: recorded_without_numeric_equality_requirement

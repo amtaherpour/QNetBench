@@ -1,0 +1,48 @@
+name: Checkpoint 9 QuISP qualification
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [checkpoint-09-semantic-mapping]
+    paths:
+      - .github/workflows/checkpoint-09-quisp.yml
+      - research/backends/quisp/**
+      - simulators/mappings/v0_1/quisp.yaml
+  pull_request:
+    paths:
+      - .github/workflows/checkpoint-09-quisp.yml
+      - research/backends/quisp/**
+      - simulators/mappings/v0_1/quisp.yaml
+
+concurrency:
+  group: checkpoint-09-quisp-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    container:
+      image: ghcr.io/sfc-aqua/quisp-ci:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - uses: actions/checkout@v4
+      - name: Headless build and NoErrorMIM qualification
+        run: |
+          mkdir -p research/evidence/checkpoint_09
+          bash research/backends/quisp/qualify.sh \
+            "$RUNNER_TEMP/quisp-qualification" \
+            research/evidence/checkpoint_09
+      - uses: actions/upload-artifact@v4
+        with:
+          name: checkpoint-09-quisp-qualification
+          path: |
+            research/evidence/checkpoint_09/quisp_qualification.json
+            research/evidence/checkpoint_09/quisp_no_error_mim.log

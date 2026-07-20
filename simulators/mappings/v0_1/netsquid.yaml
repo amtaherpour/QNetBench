@@ -1,0 +1,24 @@
+mapping_schema_version: "1.0"
+contract_version: "0.1"
+simulator_id: netsquid
+status: optional_byo_boundary_frozen_package_probe_not_authorized
+portfolio_role: optional_credentialed_reference
+installation_boundary:
+  distribution: separate optional package named qnetbench-netsquid
+  core_dependency: prohibited
+  default_ci_import: prohibited
+  discovery: explicit adapter registration after optional package import
+  credentials: user-provided through a private CI secret store; never checked into QNetBench
+  package_index: https://pypi.netsquid.org
+  terms: user must independently register and accept applicable terms
+conformance_boundary:
+  required_before_support_claim:
+    - exact package version and documentation revision
+    - authorized clean installation evidence
+    - link-2 and chain-3 mapping probes
+    - seed, simulated time, fidelity, status, path, and raw extraction mapping
+    - complete and failed canonical bundle conformance in the optional package
+open_core_policy:
+  absence_of_credentials: does_not_block
+  absence_of_netsquid_results: does_not_weaken_open_paper_claim
+  paper_results_if_present: clearly separated as optional credentialed reproduction lane

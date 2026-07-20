@@ -303,8 +303,13 @@ def run_case(
                 "raw_fidelity",
                 profile.link_fidelity,
             )
-            router.swapping_success_prob = profile.swap_success_probability
-            router.swapping_degradation = profile.swap_fidelity_factor
+            reservation_protocol = router.network_manager.protocol_stack[1]
+            reservation_protocol.set_swapping_success_rate(
+                profile.swap_success_probability
+            )
+            reservation_protocol.set_swapping_degradation(
+                profile.swap_fidelity_factor
+            )
 
         quantum_speed_m_ps = profile.quantum_propagation_speed_km_per_s * 1e-9
         for channel in topology.get_qchannels():

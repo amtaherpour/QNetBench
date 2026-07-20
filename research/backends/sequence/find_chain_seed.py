@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from research.backends.sequence.mapping_probe import run_case
+from mapping_probe import run_case
 
 
 def main() -> None:

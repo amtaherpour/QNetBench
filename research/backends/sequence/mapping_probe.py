@@ -1,6 +1,6 @@
 """Executable semantic-mapping probe for SeQUeNCe 1.0.0.
 
-This is research evidence for Checkpoint 9, not a production adapter.
+This is Checkpoint 9 research evidence, not a production adapter.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ from typing import Any
 
 import networkx as nx
 from sequence.app.request_app import RequestApp
-from sequence.constants import SECOND, SINGLE_HERALDED
+from sequence.constants import DENSITY_MATRIX_FORMALISM, SINGLE_HERALDED
 from sequence.entanglement_management.generation import (
     EntanglementGenerationA,
     EntanglementGenerationB,
@@ -31,7 +31,7 @@ TARGET_FIDELITY = 0.5
 
 
 class RecordingRequestApp(RequestApp):
-    """RequestApp variant recording native successful entanglement events."""
+    """Record native successful entanglement events exposed by RequestApp."""
 
     def __init__(self, node: Any, *, limit: int, inverse_names: dict[str, str]):
         super().__init__(node)
@@ -69,9 +69,6 @@ class RecordingRequestApp(RequestApp):
                         "callback_time_ps": int(self.node.timeline.now()),
                         "memory_index": int(info.index),
                         "fidelity": float(info.fidelity),
-                        "remote_node": self.inverse_names.get(
-                            info.remote_node, info.remote_node
-                        ),
                         "path": [
                             self.inverse_names.get(name, name)
                             for name in reservation.path
@@ -81,27 +78,32 @@ class RecordingRequestApp(RequestApp):
         super().get_memory(info)
 
 
-def _graph(spec: BenchmarkSpec, attenuation_override: float | None) -> nx.Graph:
+def _build_graph(spec: BenchmarkSpec) -> nx.Graph:
     graph = nx.Graph()
     for node in spec.network.nodes:
         graph.add_node(node.node_id)
-    attenuation = (
-        spec.physical_profile.fiber_attenuation_db_per_km
-        if attenuation_override is None
-        else attenuation_override
-    )
+    attenuation = spec.physical_profile.fiber_attenuation_db_per_km / 1000.0
     for link in spec.network.links:
         graph.add_edge(
             link.endpoints[0],
             link.endpoints[1],
             length=link.length_km,
-            attenuation=attenuation / 1000.0,
+            attenuation=attenuation,
         )
     return graph
 
 
-def _template(spec: BenchmarkSpec, detector_efficiency: float) -> dict[str, Any]:
+def _node_template(
+    spec: BenchmarkSpec,
+    detector_efficiency: float,
+) -> dict[str, Any]:
     profile = spec.physical_profile
+    detector = {
+        "efficiency": detector_efficiency,
+        "dark_count": 0,
+        "time_resolution": 1,
+        "count_rate": 100_000_000_000.0,
+    }
     return {
         "router_template": {
             "MemoryArray": {
@@ -114,26 +116,13 @@ def _template(spec: BenchmarkSpec, detector_efficiency: float) -> dict[str, Any]
         "bsm_template": {
             "encoding_type": "single_heralded",
             "SingleHeraldedBSM": {
-                "detectors": [
-                    {
-                        "efficiency": detector_efficiency,
-                        "dark_count": 0,
-                        "time_resolution": 1,
-                        "count_rate": 100_000_000_000.0,
-                    },
-                    {
-                        "efficiency": detector_efficiency,
-                        "dark_count": 0,
-                        "time_resolution": 1,
-                        "count_rate": 100_000_000_000.0,
-                    },
-                ]
+                "detectors": [detector.copy(), detector.copy()]
             },
         },
     }
 
 
-def _canonical_shortest_path(spec: BenchmarkSpec) -> tuple[str, ...]:
+def _shortest_path(spec: BenchmarkSpec) -> tuple[str, ...]:
     graph = nx.Graph()
     for link in spec.network.links:
         graph.add_edge(
@@ -161,14 +150,14 @@ def _patch_config(
     for index, node in enumerate(config["nodes"]):
         node["seed"] = seed * 10_000 + index
 
-    inverse = {name: node_id for node_id, name in graph_to_name.items()}
+    inverse_names = {name: node_id for node_id, name in graph_to_name.items()}
     speed_m_ps = classical_speed_km_s * 1e-9
     for channel in config["cchannels"]:
         if "distance" in channel:
             channel["delay"] = int(round(channel["distance"] / speed_m_ps))
             continue
-        source = inverse[channel["source"]]
-        destination = inverse[channel["destination"]]
+        source = inverse_names[channel["source"]]
+        destination = inverse_names[channel["destination"]]
         distance_km = nx.shortest_path_length(
             graph,
             source,
@@ -180,23 +169,22 @@ def _patch_config(
         )
 
 
-def _build_records(
+def _records_from_events(
     spec: BenchmarkSpec,
-    *,
     events: list[dict[str, Any]],
-    native_offset_ps: int,
 ) -> tuple[RequestResult, ...]:
-    expected_path = _canonical_shortest_path(spec)
+    expected_path = _shortest_path(spec)
+    control_offset_ps = int(round(CONTROL_LEAD_S * PS_PER_SECOND))
     records: list[RequestResult] = []
     for index in range(spec.workload.request_count):
         request_id = f"request-{index + 1:04d}"
         if index < len(events):
             event = events[index]
-            terminal = max(
-                spec.workload.batch_start_s,
-                (event["native_time_ps"] - native_offset_ps) / PS_PER_SECOND,
-            )
-            terminal = min(terminal, spec.workload.deadline_s)
+            terminal = (
+                event["native_time_ps"] - control_offset_ps
+            ) / PS_PER_SECOND
+            terminal = max(spec.workload.batch_start_s, terminal)
+            terminal = min(spec.workload.deadline_s, terminal)
             records.append(
                 RequestResult(
                     request_id=request_id,
@@ -212,7 +200,9 @@ def _build_records(
                     failure_reason=None,
                     metadata={
                         "simulator": "sequence",
-                        "classification": "native_event_derived_request_assignment",
+                        "classification": (
+                            "native_event_derived_request_assignment"
+                        ),
                         "native_time_ps": event["native_time_ps"],
                         "callback_time_ps": event["callback_time_ps"],
                         "memory_index": event["memory_index"],
@@ -251,11 +241,11 @@ def run_case(
     controlled_failure: bool,
 ) -> dict[str, Any]:
     spec = load_benchmark(benchmark_path)
-    graph = _graph(spec, None)
+    graph = _build_graph(spec)
     detector_efficiency = (
         0.0 if controlled_failure else spec.physical_profile.detector_efficiency
     )
-    native_offset_ps = int(
+    native_start_ps = int(
         round((CONTROL_LEAD_S + spec.workload.batch_start_s) * PS_PER_SECOND)
     )
     native_end_ps = int(
@@ -270,8 +260,8 @@ def run_case(
             output_file="topology.json",
             output_directory=directory,
             stop_time=CONTROL_LEAD_S + spec.workload.deadline_s + 0.01,
-            formalism="bell_diagonal",
-            node_template=_template(spec, detector_efficiency),
+            formalism=DENSITY_MATRIX_FORMALISM,
+            node_template=_node_template(spec, detector_efficiency),
         )
         _patch_config(
             config,
@@ -294,29 +284,23 @@ def run_case(
             for router in topology.get_nodes_by_type(RouterNetTopo.QUANTUM_ROUTER)
         }
         inverse_names = {name: node_id for node_id, name in graph_to_name.items()}
+        profile = spec.physical_profile
         for router in routers.values():
             memory_array = router.get_components_by_type("MemoryArray")[0]
-            profile = spec.physical_profile
             memory_array.update_memory_params("frequency", profile.memory_frequency_hz)
             memory_array.update_memory_params(
-                "coherence_time", profile.memory_coherence_time_s
+                "coherence_time",
+                profile.memory_coherence_time_s,
             )
             memory_array.update_memory_params("efficiency", profile.memory_efficiency)
             memory_array.update_memory_params("raw_fidelity", profile.link_fidelity)
-            reservation_protocol = router.network_manager.protocol_stack[1]
-            reservation_protocol.set_swapping_success_rate(
-                profile.swap_success_probability
-            )
-            reservation_protocol.set_swapping_degradation(
-                profile.swap_fidelity_factor
-            )
+            router.swapping_success_prob = profile.swap_success_probability
+            router.swapping_degradation = profile.swap_fidelity_factor
 
-        quantum_speed_m_ps = (
-            spec.physical_profile.quantum_propagation_speed_km_per_s * 1e-9
-        )
+        quantum_speed_m_ps = profile.quantum_propagation_speed_km_per_s * 1e-9
         for channel in topology.get_qchannels():
             channel.light_speed = quantum_speed_m_ps
-            channel.frequency = spec.physical_profile.memory_frequency_hz
+            channel.frequency = profile.memory_frequency_hz
 
         source_name = graph_to_name[spec.workload.source]
         destination_name = graph_to_name[spec.workload.destination]
@@ -326,26 +310,20 @@ def run_case(
             inverse_names=inverse_names,
         )
         RequestApp(routers[destination_name])
-
         timeline.init()
         source_app.start(
             responder=destination_name,
-            start_t=native_offset_ps,
+            start_t=native_start_ps,
             end_t=native_end_ps,
             memo_size=min(
-                spec.physical_profile.memory_count_per_node,
+                profile.memory_count_per_node,
                 spec.workload.request_count,
             ),
             fidelity=TARGET_FIDELITY,
         )
         timeline.run()
 
-    records = _build_records(
-        spec,
-        events=source_app.events,
-        native_offset_ps=int(round(CONTROL_LEAD_S * PS_PER_SECOND)),
-    )
-    serialized_records = [record.model_dump(mode="json") for record in records]
+    records = _records_from_events(spec, source_app.events)
     payload: dict[str, Any] = {
         "probe_schema_version": "1.0",
         "simulator_id": "sequence",
@@ -360,7 +338,7 @@ def run_case(
         "simulator_control_target_fidelity": TARGET_FIDELITY,
         "reservation_events": source_app.reservation_events,
         "native_success_event_count": len(source_app.events),
-        "records": serialized_records,
+        "records": [record.model_dump(mode="json") for record in records],
     }
     canonical = json.dumps(
         payload,
@@ -377,23 +355,22 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     arguments = parser.parse_args()
-    cases = (
-        Path("benchmarks/v0_1/link_2_batch.yaml"),
-        Path("benchmarks/v0_1/chain_3_batch.yaml"),
-    )
     evidence: dict[str, Any] = {
         "evidence_schema_version": "1.0",
         "simulator_id": "sequence",
         "simulator_version": "1.0.0",
         "cases": {},
     }
-    for benchmark_path in cases:
+    for benchmark_path in (
+        Path("benchmarks/v0_1/link_2_batch.yaml"),
+        Path("benchmarks/v0_1/chain_3_batch.yaml"),
+    ):
         first = run_case(benchmark_path, seed=7, controlled_failure=False)
         repeat = run_case(benchmark_path, seed=7, controlled_failure=False)
         alternate = run_case(benchmark_path, seed=8, controlled_failure=False)
         failure = run_case(benchmark_path, seed=7, controlled_failure=True)
         if first != repeat:
-            raise RuntimeError(f"{benchmark_path}: same-seed evidence is not identical")
+            raise RuntimeError(f"{benchmark_path}: same-seed evidence differs")
         normal_successes = sum(
             record["status"] == "success" for record in first["records"]
         )
@@ -404,7 +381,7 @@ def main() -> None:
             raise RuntimeError(f"{benchmark_path}: normal probe produced no success")
         if failure_successes != 0:
             raise RuntimeError(
-                f"{benchmark_path}: controlled-failure probe produced a success"
+                f"{benchmark_path}: controlled failure produced a success"
             )
         evidence["cases"][first["benchmark_id"]] = {
             "same_seed_identical": True,
@@ -412,6 +389,7 @@ def main() -> None:
             "normal": first,
             "controlled_failure": failure,
         }
+
     arguments.output.parent.mkdir(parents=True, exist_ok=True)
     arguments.output.write_text(
         json.dumps(evidence, sort_keys=True, indent=2) + "\n",

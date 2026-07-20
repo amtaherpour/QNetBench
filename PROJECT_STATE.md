@@ -1,12 +1,12 @@
 # QNetBench Project State
 
 Last updated (UTC): 2026-07-20
-Status: COMPLETE
-Active checkpoint: 8.5 — Simulator portfolio and paper-strategy freeze
+Status: IN_PROGRESS
+Active checkpoint: 8.5 independent audit — Simulator portfolio and paper-strategy freeze
 Last completed checkpoint: 8.5 — Simulator portfolio and paper-strategy freeze
-Branch: `checkpoint-08-5-simulator-strategy`
-Last good commit: `8ecaf4c705b008a3f81fe3d4e8928cb810fbbd87` (core CI run 29711718606; probe evidence recorded below)
-Working tree: clean after commit
+Branch: `checkpoint-08-5-independent-audit`
+Last good commit: `f4d5f3d1b4118ace6d95788e66322a2cbf842b8c` (final Checkpoint 8.5 branch CI run 29711954466)
+Working tree: committed on audit branch
 
 ## Release target
 
@@ -23,7 +23,7 @@ Working tree: clean after commit
 
 ## Environment last verified
 
-- Core: CPython 3.12 on GitHub-hosted Ubuntu 24.04, CI run 29711718606
+- Core: CPython 3.12 on GitHub-hosted Ubuntu 24.04, final Checkpoint 8.5 branch CI run 29711954466
 - SeQUeNCe: public `sequence==1.0.0` installation/API probe, run 29710405052
 - Q2NS: exact commit `f22ba28f437099ba3cf9956ca332ba5ce8bb14fd` on ns-3.47 commit `e2c9e30c6ebdfd534aa7e30f6324b5674d138b9f`, full build/basic-example run 29710405058
 - QuISP: source commit `2530200c5aa8f43a6f1471c16b8abb98c4b7ee2c`, source qualification run 29710405064
@@ -32,7 +32,7 @@ Working tree: clean after commit
 ## What works now
 
 - The complete simulator-independent mock pipeline through Checkpoint 8 is independently audited.
-- The simulator portfolio, conformance policy, exact public revisions, checked-in probe evidence, ADRs, and finite paper-track roadmap are frozen.
+- The simulator portfolio, conformance policy, exact public revisions, checked-in probe evidence, ADRs, and finite paper-track roadmap are merged.
 - Required open targets are SeQUeNCe and Q2NS; QuISP is the qualification reserve and NetSquid is optional BYO/private CI.
 - No production real-simulator adapter or frozen v0.1 change has been added.
 
@@ -42,7 +42,7 @@ Working tree: clean after commit
 
 ## Open blockers
 
-- None.
+- None; independent post-merge verification is pending.
 
 ## Frozen assumptions in force
 
@@ -55,6 +55,7 @@ Working tree: clean after commit
 ## Latest checkpoint evidence
 
 - Report: `docs/ai_handoff/checkpoint_08_5_report.md`
+- Audit: `docs/ai_handoff/checkpoint_08_5_independent_audit.md`
 - Portfolio: `simulators/portfolio_v1.yaml`
 - Conformance profile: `simulators/conformance_v1.yaml`
 - Probe evidence: `research/evidence/`
@@ -62,4 +63,4 @@ Working tree: clean after commit
 
 ## Next allowed action
 
-Merge and independently audit Checkpoint 8.5, then execute Checkpoint 9 only: verified backend micro-scenarios and semantic mapping freeze. Do not begin production adapters.
+Complete the independent Checkpoint 8.5 audit only. Do not begin Checkpoint 9 until the merged strategy tree is independently green and recorded.

@@ -11,8 +11,7 @@ from qnetbench.errors import SweepError
 def _row(parameter: float, metric_id: str, value: float) -> AggregateRow:
     return AggregateRow(
         parameters_json=(
-            '{"physical_profile.fiber_attenuation_db_per_km":'
-            f"{parameter}" + "}"
+            f'{{"physical_profile.fiber_attenuation_db_per_km":{parameter}' + "}"
         ),
         metric_id=metric_id,
         unit="1" if metric_id == "request_success_probability" else "s",

@@ -4,9 +4,9 @@ Last updated (UTC): 2026-07-20
 Status: COMPLETE
 Active checkpoint: 8 — Finite sweep, aggregate analysis, plots, and mock-pipeline release gate
 Last completed checkpoint: 8 — Finite sweep, aggregate analysis, plots, and mock-pipeline release gate
-Branch: `checkpoint-08-mock-pipeline`
-Last good commit: `58c174ab259d19c1295faac831cc17761d9193fa` (CI run 29709417138)
-Working tree: clean after commit
+Branch: `main`
+Last good commit: `01c9ea31aba45b1f947e7ec521705cfb3c95b0ba` (independent-audit CI run 29709597153)
+Working tree: clean after merge
 
 ## Release target
 
@@ -27,7 +27,7 @@ Working tree: clean after commit
 
 ## Last passing commands
 
-GitHub Actions CI run 29709417138:
+GitHub Actions independent-audit CI run 29709597153:
 
 - editable development and plotting installation — passed
 - `python -m ruff check .` — passed
@@ -47,7 +47,7 @@ GitHub Actions CI run 29709417138:
 - Sequential sweep execution through the existing adapter-neutral single-run pipeline.
 - Validated child bundles, a sweep manifest, deterministic aggregate CSV, and exactly two approved plots.
 - The checked-in sweep expands to nine unique execution hashes and completes end to end.
-- The complete simulator-independent mock pipeline is ready for real-backend research.
+- The complete simulator-independent mock pipeline is independently audited and ready for real-backend research.
 
 ## What is intentionally not implemented
 
@@ -59,8 +59,8 @@ GitHub Actions CI run 29709417138:
 
 ## Frozen assumptions in force
 
-- Files under `schemas/v0_1/` and `docs/contracts/` remain unchanged.
-- The four frozen benchmark files and hashes remain unchanged.
+- Files under `schemas/v0_1/` and `docs/contracts/` are unchanged since the final Checkpoint 1 audit.
+- The four frozen benchmark files and hashes are unchanged since Checkpoint 7.
 - Sweep axes replace only approved scalar benchmark paths.
 - Sweep expansion is capped at 100 runs before execution; the checked-in sweep has nine.
 - Mock outputs and aggregate trends are synthetic and are not physical claims.
@@ -68,10 +68,11 @@ GitHub Actions CI run 29709417138:
 ## Latest checkpoint evidence
 
 - Report: `docs/ai_handoff/checkpoint_08_report.md`
+- Independent audit: `docs/ai_handoff/checkpoint_08_independent_audit.md`
 - Gate document: `docs/mock_pipeline_gate.md`
-- CI run: 29709417138
+- Independent-audit CI run: 29709597153
 - Checked-in sweep: `sweeps/v0_1/link_loss_small.yaml`
 
 ## Next allowed action
 
-Merge and independently re-audit Checkpoint 8, then execute Checkpoint 8.5 only: simulator portfolio and paper-strategy freeze. Do not create production real-simulator adapters during Checkpoint 8.5.
+Execute Checkpoint 8.5 only: simulator portfolio and paper-strategy freeze. Do not create production real-simulator adapters during Checkpoint 8.5.

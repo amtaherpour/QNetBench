@@ -19,13 +19,24 @@ path, and raw-extraction uncertainty before production adapter code.
   `2530200c5aa8f43a6f1471c16b8abb98c4b7ee2c`.
 - NetSquid optional BYO/private-CI boundary without fabricated credentials.
 
-## Current work
+## Verified evidence so far
 
-- Executable SeQUeNCe link-2/chain-3 mapping probe is under verification.
-- Q2NS link-2/chain-3 mapping probe is pending.
-- QuISP headless build/runtime qualification is pending.
-- Exact mapping documents, conformance fixtures, versioning decision, final CI,
-  merge, and independent audit are pending.
+- SeQUeNCe link-2 and chain-3 mapping passed in workflow 29715128630.
+- Same-seed records were identical, alternate-seed evidence was recorded, and a
+  detector-disabled controlled failure produced zero successful requests.
+- The successful SeQUeNCe artifact is 8450288447 with digest
+  `sha256:407dcecefce15682e165100eea9afc5ca5083943846bb8171cb522b2d1fe5b4c`.
+- The probe uses Barrett-Kok generation with ket-vector formalism, native RSVP
+  swapping controls, and a reservation size bounded by intermediate-memory
+  requirements.
+
+## Work under final verification
+
+- Q2NS link-2/chain-3 mapping and canonical extraction.
+- QuISP headless qualification and promotion decision.
+- Accumulated core CI after exact Ruff formatting.
+- Final mapping documents, checked-in evidence summaries, conformance tests,
+  completion metadata, merge, and independent post-merge audit.
 
 ## Scope exclusion
 
@@ -34,4 +45,4 @@ result, or frozen v0.1 change belongs to this checkpoint.
 
 ## Final status
 
-STATUS: IN_PROGRESS — Checkpoint 9 research and mapping verification pending.
+STATUS: IN_PROGRESS — final Checkpoint 9 verification pending.

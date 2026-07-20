@@ -4,6 +4,8 @@ on:
   push:
     branches: [checkpoint-09-semantic-mapping]
     paths: [.github/workflows/checkpoint-09-format-diagnostic.yml]
+  pull_request:
+    paths: [.github/workflows/checkpoint-09-format-diagnostic.yml]
 
 permissions:
   contents: read

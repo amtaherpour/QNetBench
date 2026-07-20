@@ -1,13 +1,11 @@
 name: NetSquid public access research probe
+
 on:
   workflow_dispatch:
-  push:
-    branches: [checkpoint-08-5-simulator-strategy]
-    paths: [.github/workflows/netsquid-probe.yml, research/probes/netsquid_access_probe.py, simulators/portfolio_v1.yaml]
-  pull_request:
-    paths: [.github/workflows/netsquid-probe.yml, research/probes/netsquid_access_probe.py, simulators/portfolio_v1.yaml]
+
 permissions:
   contents: read
+
 jobs:
   netsquid-access:
     runs-on: ubuntu-24.04

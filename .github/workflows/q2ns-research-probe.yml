@@ -2,17 +2,6 @@ name: Q2NS research probe
 
 on:
   workflow_dispatch:
-  push:
-    branches: [checkpoint-08-5-simulator-strategy]
-    paths:
-      - ".github/workflows/q2ns-research-probe.yml"
-      - "research/probes/q2ns_build_probe.sh"
-      - "simulators/portfolio_v1.yaml"
-  pull_request:
-    paths:
-      - ".github/workflows/q2ns-research-probe.yml"
-      - "research/probes/q2ns_build_probe.sh"
-      - "simulators/portfolio_v1.yaml"
 
 permissions:
   contents: read

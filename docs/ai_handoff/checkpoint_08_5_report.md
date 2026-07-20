@@ -1,8 +1,10 @@
 # Checkpoint 08.5 Report: Simulator portfolio and paper-strategy freeze
 
-Status: IN_PROGRESS
+Status: COMPLETE
 Date (UTC): 2026-07-20
 Branch: `checkpoint-08-5-simulator-strategy`
+CI-verified implementation head: `8ecaf4c705b008a3f81fe3d4e8928cb810fbbd87`
+Core CI run: 29711718606
 Previous good commit: `f04ec5e5361f6873a3a0286a2ce470710b7f2e61`
 
 ## Goal
@@ -11,7 +13,7 @@ Freeze a finite, evidence-based multi-simulator paper strategy after the
 independently audited mock pipeline and before any production real adapter is
 written.
 
-## Decisions frozen subject to final branch verification
+## Frozen decisions
 
 - Mandatory open targets: SeQUeNCe 1.0.0 at commit
   `ffd7c837f932c7bdc9450cd211aaf75b4d6a99a5` and Q2NS at commit
@@ -33,34 +35,37 @@ written.
 | QuISP | workflow 29710405064; exact source/license/tests/upstream limitation probe | passed as source qualification only |
 | NetSquid | workflow 29710405060; registration/private-index access-model probe | passed; package install intentionally not attempted |
 
-The checked-in JSON evidence and artifact digests are under `research/evidence/`.
+Checked-in JSON evidence and artifact digests are under `research/evidence/`.
 These probes qualify research targets; they do not claim production adapter
 support or frozen semantic mapping.
 
 ## Repository deliverables
 
-- `simulators/portfolio_v1.yaml`
-- `simulators/conformance_v1.yaml`
-- `docs/research/simulator_landscape_2026.md`
-- `docs/research/simulator_compatibility_matrix.md`
-- ADR-0002, ADR-0003, and ADR-0004
-- `docs/planning/QNetBench_Paper_Track_Roadmap_v1_0.md`
-- executable/source/access probes and immutable JSON evidence under `research/`
-- isolated GitHub Actions probe workflows
-- strategy/conformance tests
+- machine-readable portfolio and conformance profile;
+- simulator landscape and compatibility/risk matrix;
+- ADR-0002, ADR-0003, and ADR-0004;
+- authoritative paper-track roadmap v1.0;
+- executable/source/access probes and immutable JSON evidence;
+- manual reproducibility workflows for every public probe;
+- strategy/conformance tests integrated into core CI;
+- updated project-control, README, and support-matrix documents.
+
+## Quality evidence
+
+Core CI run 29711718606 passed installation, Ruff lint/format, every accumulated
+focused suite through the full mock pipeline, simulator-strategy tests, installed
+CLI smoke, the full repository suite, and whitespace checks on Python 3.12.
+
+Intermediate strategy verification exposed a brittle line-wrapped policy phrase.
+The roadmap was clarified without weakening the test; the final core gate passed.
+An earlier Q2NS tag assumption was corrected to the exact public main commit, and
+the pinned full build/example probe passed before the portfolio was frozen.
 
 ## Scope exclusions
 
 No production real adapter, cross-simulator numerical result, paper figure,
-private credential, publication action, or frozen v0.1 change belongs to this
-checkpoint.
-
-## Verification status
-
-All four public probes passed. Final accumulated core and strategy verification
-has been requested on the evidence-frozen branch head. Completion metadata,
-merge, and independent audit remain pending.
+private credential, publication action, or frozen v0.1 change was added.
 
 ## Final status
 
-STATUS: IN_PROGRESS — final CI, completion metadata, merge, and independent audit pending.
+STATUS: COMPLETE - Checkpoint 8.5 only. STOP. Next allowed action: independent audit, then Checkpoint 9.

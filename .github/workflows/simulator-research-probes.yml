@@ -2,17 +2,6 @@ name: SeQUeNCe research probe
 
 on:
   workflow_dispatch:
-  push:
-    branches: [checkpoint-08-5-simulator-strategy]
-    paths:
-      - .github/workflows/simulator-research-probes.yml
-      - research/probes/sequence_api_probe.py
-      - simulators/portfolio_v1.yaml
-  pull_request:
-    paths:
-      - .github/workflows/simulator-research-probes.yml
-      - research/probes/sequence_api_probe.py
-      - simulators/portfolio_v1.yaml
 
 permissions:
   contents: read

@@ -5,20 +5,19 @@ for quantum-network simulators. It is **not** a simulator.
 
 ## Current status
 
-Checkpoint 8 is complete and independently audited. The core provides frozen
-v0.1 benchmark/result/metric contracts, strict benchmark and sweep loading,
-canonical bundles, a deterministic synthetic mock oracle, eight standard
-metrics, adapter-neutral single-run and finite-sweep orchestration, deterministic
-aggregation, two approved plots, seven CLI commands, and four frozen benchmarks.
+Checkpoint 8.5 is complete subject to the final merge/audit. The independently
+audited mock pipeline provides frozen v0.1 contracts, canonical artifacts,
+standard metrics, single runs, bounded sweeps, deterministic aggregation, and
+approved plots. The paper-track simulator portfolio is now frozen:
 
-Checkpoint 8.5 is freezing the paper-track simulator portfolio before production
-real adapters are written. The selected open targets are SeQUeNCe and Q2NS;
-QuISP is the qualification reserve/possible third backend, and NetSquid is an
-optional credentialed bring-your-own-installation reference. A passing research
-probe does not yet mean QNetBench supports that backend.
+- mandatory open targets: SeQUeNCe and Q2NS;
+- qualification reserve/possible third backend: QuISP;
+- optional credentialed BYO reference: NetSquid;
+- deterministic non-physical software oracle: mock.
 
-The mock is a contract and pipeline oracle. Its values are synthetic and must
-never be interpreted as physical quantum-network results.
+The public probes qualify these research targets but do not yet make them
+QNetBench-supported backends. Exact semantic mappings are frozen in Checkpoint 9,
+and production adapters begin only in Checkpoint 10.
 
 ## Quick start
 
@@ -39,11 +38,10 @@ mode.
 
 ## Paper track
 
-After Checkpoint 8.5 the finite roadmap is: executable semantic mapping freeze,
-production conforming open adapters, cross-simulator scientific validation and
-reference corpus, then the independently audited paper-ready public release.
-Details are in `docs/planning/QNetBench_Paper_Track_Roadmap_v1_0.md`, with ADRs
-under `docs/decisions/` and evidence under `docs/research/` and `simulators/`.
+The finite roadmap is: Checkpoint 9 executable semantic mapping freeze,
+Checkpoint 10 production conforming open adapters, Checkpoint 11 cross-simulator
+scientific validation/reference corpus, and Checkpoint 12 paper-ready public
+release. See `docs/planning/QNetBench_Paper_Track_Roadmap_v1_0.md`.
 
 ## Frozen catalog
 

@@ -14,7 +14,7 @@ from typing import Any
 
 import networkx as nx
 from sequence.app.request_app import RequestApp
-from sequence.constants import DENSITY_MATRIX_FORMALISM, SINGLE_HERALDED
+from sequence.constants import BELL_DIAGONAL_STATE_FORMALISM, SINGLE_HERALDED
 from sequence.entanglement_management.generation import (
     EntanglementGenerationA,
     EntanglementGenerationB,
@@ -33,7 +33,13 @@ TARGET_FIDELITY = 0.5
 class RecordingRequestApp(RequestApp):
     """Record native successful entanglement events exposed by RequestApp."""
 
-    def __init__(self, node: Any, *, limit: int, inverse_names: dict[str, str]):
+    def __init__(
+        self,
+        node: Any,
+        *,
+        limit: int,
+        inverse_names: dict[str, str],
+    ) -> None:
         super().__init__(node)
         self.limit = limit
         self.inverse_names = inverse_names
@@ -115,9 +121,7 @@ def _node_template(
         },
         "bsm_template": {
             "encoding_type": "single_heralded",
-            "SingleHeraldedBSM": {
-                "detectors": [detector.copy(), detector.copy()]
-            },
+            "SingleHeraldedBSM": {"detectors": [detector.copy(), detector.copy()]},
         },
     }
 
@@ -180,9 +184,7 @@ def _records_from_events(
         request_id = f"request-{index + 1:04d}"
         if index < len(events):
             event = events[index]
-            terminal = (
-                event["native_time_ps"] - control_offset_ps
-            ) / PS_PER_SECOND
+            terminal = (event["native_time_ps"] - control_offset_ps) / PS_PER_SECOND
             terminal = max(spec.workload.batch_start_s, terminal)
             terminal = min(spec.workload.deadline_s, terminal)
             records.append(
@@ -218,9 +220,7 @@ def _records_from_events(
                     submitted_at_s=spec.workload.batch_start_s,
                     terminal_at_s=spec.workload.deadline_s,
                     status="timed_out",
-                    latency_s=(
-                        spec.workload.deadline_s - spec.workload.batch_start_s
-                    ),
+                    latency_s=(spec.workload.deadline_s - spec.workload.batch_start_s),
                     fidelity=None,
                     attempts=None,
                     path=expected_path,
@@ -260,7 +260,7 @@ def run_case(
             output_file="topology.json",
             output_directory=directory,
             stop_time=CONTROL_LEAD_S + spec.workload.deadline_s + 0.01,
-            formalism=DENSITY_MATRIX_FORMALISM,
+            formalism=BELL_DIAGONAL_STATE_FORMALISM,
             node_template=_node_template(spec, detector_efficiency),
         )
         _patch_config(
@@ -287,13 +287,22 @@ def run_case(
         profile = spec.physical_profile
         for router in routers.values():
             memory_array = router.get_components_by_type("MemoryArray")[0]
-            memory_array.update_memory_params("frequency", profile.memory_frequency_hz)
+            memory_array.update_memory_params(
+                "frequency",
+                profile.memory_frequency_hz,
+            )
             memory_array.update_memory_params(
                 "coherence_time",
                 profile.memory_coherence_time_s,
             )
-            memory_array.update_memory_params("efficiency", profile.memory_efficiency)
-            memory_array.update_memory_params("raw_fidelity", profile.link_fidelity)
+            memory_array.update_memory_params(
+                "efficiency",
+                profile.memory_efficiency,
+            )
+            memory_array.update_memory_params(
+                "raw_fidelity",
+                profile.link_fidelity,
+            )
             router.swapping_success_prob = profile.swap_success_probability
             router.swapping_degradation = profile.swap_fidelity_factor
 
@@ -347,7 +356,9 @@ def run_case(
         sort_keys=True,
         separators=(",", ":"),
     )
-    payload["canonical_digest"] = hashlib.sha256(canonical.encode()).hexdigest()
+    payload["canonical_digest"] = hashlib.sha256(
+        canonical.encode("utf-8")
+    ).hexdigest()
     return payload
 
 

@@ -1,0 +1,13 @@
+{
+  "build_completed": true,
+  "configure_completed": true,
+  "example": "q2ns-1-basics-example",
+  "example_completed": true,
+  "example_log_bytes": 372,
+  "ns3_commit": "e2c9e30c6ebdfd534aa7e30f6324b5674d138b9f",
+  "ns3_ref": "ns-3.47",
+  "probe_schema_version": "1.0",
+  "q2ns_commit": "f22ba28f437099ba3cf9956ca332ba5ce8bb14fd",
+  "q2ns_ref": "main",
+  "simulator_id": "q2ns"
+}

@@ -1,27 +1,23 @@
 # QNetBench
 
-QNetBench is a Python benchmark and reproducibility layer above quantum-network
-simulators. It is **not** a simulator.
+QNetBench is a simulator-neutral benchmark, conformance, and reproducibility layer
+for quantum-network simulators. It is **not** a simulator.
 
 ## Current status
 
-Checkpoint 8 is complete. The simulator-independent mock pipeline now provides:
+Checkpoint 8.5 is complete subject to the final merge/audit. The independently
+audited mock pipeline provides frozen v0.1 contracts, canonical artifacts,
+standard metrics, single runs, bounded sweeps, deterministic aggregation, and
+approved plots. The paper-track simulator portfolio is now frozen:
 
-- frozen v0.1 benchmark, result, and metric contracts;
-- strict benchmark and sweep loading, canonicalization, and SHA-256 identities;
-- canonical complete and failed result bundles with atomic I/O;
-- a deterministic synthetic mock adapter;
-- the eight backend-independent standard metrics;
-- adapter-neutral single-run and sequential finite-sweep orchestration;
-- deterministic aggregate CSV output and exactly two approved plots;
-- the `list`, `validate`, `run`, `sweep`, `plot`, `summarize`, and
-  `validate-result` CLI commands; and
-- exactly four frozen v0.1 catalog benchmarks.
+- mandatory open targets: SeQUeNCe and Q2NS;
+- qualification reserve/possible third backend: QuISP;
+- optional credentialed BYO reference: NetSquid;
+- deterministic non-physical software oracle: mock.
 
-The mock backend is a contract and pipeline oracle. Its values are synthetic and
-must not be interpreted as physical quantum-network results. Production
-real-simulator adapters have not started; their portfolio and mapping will be
-frozen separately before implementation.
+The public probes qualify these research targets but do not yet make them
+QNetBench-supported backends. Exact semantic mappings are frozen in Checkpoint 9,
+and production adapters begin only in Checkpoint 10.
 
 ## Quick start
 
@@ -36,11 +32,16 @@ qnetbench sweep sweeps/v0_1/link_loss_small.yaml --backend mock --out results/li
 qnetbench plot results/link-loss-small
 ```
 
-Existing single-run output is never replaced unless `--overwrite` is supplied
-explicitly. Existing sweep output always fails; alpha has no resume, retry,
-parallel, or overwrite mode. See `docs/quickstart.md`,
-`docs/reproducibility.md`, `docs/adapter_guide.md`, `docs/support_matrix.md`, and
-`docs/mock_pipeline_gate.md`.
+Existing single-run output is replaced only with explicit `--overwrite`. Existing
+sweep output always fails; alpha has no resume, retry, parallel, or sweep-overwrite
+mode.
+
+## Paper track
+
+The finite roadmap is: Checkpoint 9 executable semantic mapping freeze,
+Checkpoint 10 production conforming open adapters, Checkpoint 11 cross-simulator
+scientific validation/reference corpus, and Checkpoint 12 paper-ready public
+release. See `docs/planning/QNetBench_Paper_Track_Roadmap_v1_0.md`.
 
 ## Frozen catalog
 

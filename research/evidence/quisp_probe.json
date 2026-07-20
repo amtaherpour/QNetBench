@@ -1,0 +1,11 @@
+{
+  "license_file_present": true,
+  "omnetpp_required": true,
+  "probe_schema_version": "1.0",
+  "runtime_build_attempted": false,
+  "simulation_tests_present": true,
+  "simulator_id": "quisp",
+  "source_commit": "2530200c5aa8f43a6f1471c16b8abb98c4b7ee2c",
+  "source_ref": "master",
+  "swapping_output_collection_declared_incomplete": true
+}

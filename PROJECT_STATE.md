@@ -2,56 +2,43 @@
 
 Last updated (UTC): 2026-07-20
 Status: COMPLETE
-Active checkpoint: 8 — Finite sweep, aggregate analysis, plots, and mock-pipeline release gate
-Last completed checkpoint: 8 — Finite sweep, aggregate analysis, plots, and mock-pipeline release gate
-Branch: `main`
-Last good commit: `01c9ea31aba45b1f947e7ec521705cfb3c95b0ba` (independent-audit CI run 29709597153)
-Working tree: clean after merge
+Active checkpoint: 8.5 — Simulator portfolio and paper-strategy freeze
+Last completed checkpoint: 8.5 — Simulator portfolio and paper-strategy freeze
+Branch: `checkpoint-08-5-simulator-strategy`
+Last good commit: `8ecaf4c705b008a3f81fe3d4e8928cb810fbbd87` (core CI run 29711718606; probe evidence recorded below)
+Working tree: clean after commit
 
 ## Release target
 
-- Target version: `0.1.0a1`
+- Original alpha target: `0.1.0a1`
+- Paper-ready release target: to be versioned at Checkpoint 12
 - Current package version: `0.0.0.dev0`
 - Benchmark contract: 0.1 frozen
 - Result contract: 0.1 frozen
 - Metrics contract: 0.1 frozen
 - `mock_pipeline_ready`: true
+- `simulator_portfolio_frozen`: true
 - `sequence_research_verified`: false
 - `release_candidate_ready`: false
 
 ## Environment last verified
 
-- Python: CPython 3.12 on GitHub-hosted Ubuntu 24.04
-- Install command: `python -m pip install -e ".[dev,plot]"`
-- Real-simulator research environment: N/A
-
-## Last passing commands
-
-GitHub Actions independent-audit CI run 29709597153:
-
-- editable development and plotting installation — passed
-- `python -m ruff check .` — passed
-- `python -m ruff format --check .` — passed
-- all focused suites from contracts through catalog — passed
-- sweep and analysis tests — passed
-- full mock-pipeline gate test — passed
-- installed CLI smoke for all four frozen benchmarks, the nine-run sweep, and both approved plots — passed
-- full repository test suite — passed
-- `git diff --check` — passed
+- Core: CPython 3.12 on GitHub-hosted Ubuntu 24.04, CI run 29711718606
+- SeQUeNCe: public `sequence==1.0.0` installation/API probe, run 29710405052
+- Q2NS: exact commit `f22ba28f437099ba3cf9956ca332ba5ce8bb14fd` on ns-3.47 commit `e2c9e30c6ebdfd534aa7e30f6324b5674d138b9f`, full build/basic-example run 29710405058
+- QuISP: source commit `2530200c5aa8f43a6f1471c16b8abb98c4b7ee2c`, source qualification run 29710405064
+- NetSquid: public access-model run 29710405060; package credentials were neither requested nor fabricated
 
 ## What works now
 
-- All independently audited capabilities through Checkpoint 7.
-- Strict SweepSpec v0.1 loading with approved scalar replacements and explicit seeds.
-- Deterministic bounded cartesian expansion with a hard 100-run preflight cap.
-- Sequential sweep execution through the existing adapter-neutral single-run pipeline.
-- Validated child bundles, a sweep manifest, deterministic aggregate CSV, and exactly two approved plots.
-- The checked-in sweep expands to nine unique execution hashes and completes end to end.
-- The complete simulator-independent mock pipeline is independently audited and ready for real-backend research.
+- The complete simulator-independent mock pipeline through Checkpoint 8 is independently audited.
+- The simulator portfolio, conformance policy, exact public revisions, checked-in probe evidence, ADRs, and finite paper-track roadmap are frozen.
+- Required open targets are SeQUeNCe and Q2NS; QuISP is the qualification reserve and NetSquid is optional BYO/private CI.
+- No production real-simulator adapter or frozen v0.1 change has been added.
 
 ## What is intentionally not implemented
 
-- Parallelism, resume, retries, conditional axes, random search, databases, dashboards, or real-simulator research/integration.
+- Real-backend semantic micro-scenarios, production adapters, cross-simulator results, private credentialed packages, or publication actions.
 
 ## Open blockers
 
@@ -59,20 +46,20 @@ GitHub Actions independent-audit CI run 29709597153:
 
 ## Frozen assumptions in force
 
-- Files under `schemas/v0_1/` and `docs/contracts/` are unchanged since the final Checkpoint 1 audit.
-- The four frozen benchmark files and hashes are unchanged since Checkpoint 7.
-- Sweep axes replace only approved scalar benchmark paths.
-- Sweep expansion is capped at 100 runs before execution; the checked-in sweep has nine.
-- Mock outputs and aggregate trends are synthetic and are not physical claims.
+- Files under `schemas/v0_1/` and `docs/contracts/` remain unchanged.
+- The four frozen benchmark files and hashes remain unchanged.
+- Mock outputs remain synthetic and non-physical.
+- Numerical equality across independent simulators is not a conformance requirement.
+- Real-adapter production is prohibited until Checkpoint 9 freezes exact semantic mappings.
 
 ## Latest checkpoint evidence
 
-- Report: `docs/ai_handoff/checkpoint_08_report.md`
-- Independent audit: `docs/ai_handoff/checkpoint_08_independent_audit.md`
-- Gate document: `docs/mock_pipeline_gate.md`
-- Independent-audit CI run: 29709597153
-- Checked-in sweep: `sweeps/v0_1/link_loss_small.yaml`
+- Report: `docs/ai_handoff/checkpoint_08_5_report.md`
+- Portfolio: `simulators/portfolio_v1.yaml`
+- Conformance profile: `simulators/conformance_v1.yaml`
+- Probe evidence: `research/evidence/`
+- Paper-track roadmap: `docs/planning/QNetBench_Paper_Track_Roadmap_v1_0.md`
 
 ## Next allowed action
 
-Execute Checkpoint 8.5 only: simulator portfolio and paper-strategy freeze. Do not create production real-simulator adapters during Checkpoint 8.5.
+Merge and independently audit Checkpoint 8.5, then execute Checkpoint 9 only: verified backend micro-scenarios and semantic mapping freeze. Do not begin production adapters.

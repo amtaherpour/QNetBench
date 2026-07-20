@@ -59,6 +59,9 @@ jobs:
       - name: Full mock-pipeline gate test
         run: python -m pytest -q tests/integration/test_full_mock_pipeline.py
 
+      - name: Simulator strategy tests
+        run: python -m pytest -q tests/strategy
+
       - name: Installed CLI mock-pipeline smoke
         run: |
           qnetbench list

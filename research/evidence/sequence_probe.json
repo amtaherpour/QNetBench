@@ -1,0 +1,18 @@
+{
+  "package_version": "1.0.0",
+  "probe_schema_version": "1.0",
+  "quantum_router_seed_api": true,
+  "request_app_start_parameters": [
+    "self",
+    "responder",
+    "start_t",
+    "end_t",
+    "memo_size",
+    "fidelity"
+  ],
+  "router_topology_api": true,
+  "simulator_id": "sequence",
+  "timeline_constructed": true,
+  "timeline_empty_run_completed": true,
+  "timeline_seed_api": true
+}

@@ -1,0 +1,22 @@
+name: NetSquid public access research probe
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  netsquid-access:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: mkdir -p research/evidence && python research/probes/netsquid_access_probe.py --output research/evidence/netsquid_probe.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: netsquid-access-probe
+          path: research/evidence/netsquid_probe.json
